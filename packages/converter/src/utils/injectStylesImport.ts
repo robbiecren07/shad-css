@@ -1,13 +1,20 @@
 import ts from 'typescript'
 
 /**
- * Injects an import statement for styles into the source text of a TypeScript/TSX file.
- * The import statement is added at the top of the file, right after any "use client" directive,
- * and before any other statements.
+ * Injects a CSS module import statement into a TypeScript/TSX file.
  *
- * @param sourceText - The source text of the TypeScript/TSX file.
- * @param modulePath - The path to the CSS module file to import. Defaults to './Component.module.css'.
- * @param fileName - The name of the file being processed, used for creating the source file. Defaults to 'index.tsx'.
+ * This function:
+ * 1. Creates a TypeScript source file from the input text
+ * 2. Creates an import declaration for the styles module
+ * 3. Processes existing statements to:
+ *    - Preserve "use client" directives
+ *    - Insert styles import after imports but before other statements
+ *    - Add import at the end if no other statements exist
+ * 4. Returns the updated source text with the new import
+ *
+ * @param sourceText The source text of the TypeScript/TSX file.
+ * @param modulePath The path to the CSS module file to import. Defaults to './Component.module.css'.
+ * @param fileName The name of the file being processed, used for creating the source file. Defaults to 'index.tsx'.
  * @returns The updated source text with the styles import statement injected.
  */
 export function injectStylesImport(
@@ -15,7 +22,8 @@ export function injectStylesImport(
   modulePath: string = './Component.module.css',
   fileName: string = 'index.tsx'
 ): string {
-  // Create a source file with the provided source text and file name
+  // Create TypeScript source file from input text
+  // - Used for AST manipulation and printing
   const sourceFile = ts.createSourceFile(
     fileName, // now dynamic
     sourceText,
@@ -25,21 +33,24 @@ export function injectStylesImport(
   )
 
   const printer = ts.createPrinter()
-  // Create an import declaration for the styles module
+  // Create the styles import declaration
+  // - Imports 'styles' from the specified module path
+  // - Uses TypeScript's factory to create the AST node
   const stylesImport = ts.factory.createImportDeclaration(
     undefined,
     ts.factory.createImportClause(false, ts.factory.createIdentifier('styles'), undefined),
     ts.factory.createStringLiteral(modulePath)
   )
 
-  // Prepare an array to hold the updated statements
+  // Prepare for statement processing
+  // - Array to collect updated statements
+  // - Flag to track if styles import has been inserted
   const statements: ts.Statement[] = []
   let inserted = false
 
-  // Iterate through the source file statements
-  // and inject the styles import at the appropriate position
+  // Process existing statements
   for (const stmt of sourceFile.statements) {
-    // Preserve "use client"
+    // Preserve "use client" directives
     if (
       ts.isExpressionStatement(stmt) &&
       ts.isStringLiteral(stmt.expression) &&
@@ -49,7 +60,7 @@ export function injectStylesImport(
       continue
     }
 
-    // Insert right after all import declarations
+    // Insert styles import after imports but before other statements
     if (!inserted && !ts.isImportDeclaration(stmt)) {
       statements.push(stylesImport)
       inserted = true
@@ -58,13 +69,15 @@ export function injectStylesImport(
     statements.push(stmt)
   }
 
-  // If we haven't inserted the styles import yet, add it at the end
-  // This handles cases where there are no other statements
+  // Add styles import at the end if no other statements exist
+  // This handles empty files or files with no imports
   if (!inserted) {
     statements.push(stylesImport)
   }
 
-  // Create a new source file with the updated statements
+  // Generate updated source text
+  // - Create new source file with all statements
+  // - Print the AST back to text
   const updatedSource = ts.factory.updateSourceFile(sourceFile, statements)
   return printer.printFile(updatedSource)
 }

@@ -1,55 +1,62 @@
 import ts from 'typescript'
 
 /**
- * This function recursively extracts class names from various types of expressions,
- * including string literals, call expressions, binary expressions, conditional expressions,
- * object literal expressions, and array literal expressions.
- * It handles cases where class names are defined as strings, concatenated, or passed as arguments
- * to functions.
+ * Recursively extracts class names from complex TypeScript expressions.
  *
- * @param expr - A TypeScript expression that may contain class names.
+ * This function handles various expression types that may contain class names:
+ * - String literals and template literals
+ * - Function calls with class name arguments
+ * - Binary expressions (e.g., string concatenation)
+ * - Conditional expressions (e.g., ternary operators)
+ * - Object literals with class name properties
+ * - Array literals with class name elements
+ *
+ * @param expr A TypeScript expression that may contain class names.
  * @returns An array of class names extracted from the expression.
  */
 export function extractClassNamesFromExpression(expr: ts.Expression): string[] {
   const classNames: string[] = []
 
-  // Handle different types of expressions
+  // Handle different expression types
   if (ts.isStringLiteral(expr) || ts.isNoSubstitutionTemplateLiteral(expr)) {
+    // Handle simple string literals
     classNames.push(expr.text)
-    // Handle template literals
   } else if (ts.isCallExpression(expr)) {
+    // Handle function calls
+    // Extract class names from all arguments
     for (const arg of expr.arguments) {
-      // If the argument is a string literal or a template literal, add it directly
       if (ts.isExpression(arg)) {
-        // Recursively extract class names from the argument
         classNames.push(...extractClassNamesFromExpression(arg))
       }
     }
   } else if (ts.isBinaryExpression(expr)) {
-    // For binary expressions, recursively extract class names from both sides
+    // Handle binary operations (e.g., string concatenation)
+    // Extract class names from both operands
     classNames.push(
       ...extractClassNamesFromExpression(expr.left),
       ...extractClassNamesFromExpression(expr.right)
     )
   } else if (ts.isConditionalExpression(expr)) {
-    // For conditional expressions, extract class names from both branches
+    // Handle conditional expressions (e.g., ternary operators)
+    // Extract class names from both branches
     classNames.push(
       ...extractClassNamesFromExpression(expr.whenTrue),
       ...extractClassNamesFromExpression(expr.whenFalse)
     )
   } else if (ts.isObjectLiteralExpression(expr)) {
-    // For object literal expressions, extract class names from property assignments
+    // Handle object literals
+    // Extract class names from property keys
     for (const prop of expr.properties) {
       if (ts.isPropertyAssignment(prop)) {
         const key = prop.name
-        // If the key is an identifier or string literal, add its text to classNames
         if (ts.isIdentifier(key) || ts.isStringLiteral(key)) {
           classNames.push(key.text)
         }
       }
     }
   } else if (ts.isArrayLiteralExpression(expr)) {
-    // For array literal expressions, recursively extract class names from each element
+    // Handle array literals
+    // Extract class names from all elements
     for (const el of expr.elements) {
       if (ts.isExpression(el)) {
         classNames.push(...extractClassNamesFromExpression(el))
