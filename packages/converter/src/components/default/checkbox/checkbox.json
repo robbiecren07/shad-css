@@ -3,6 +3,7 @@
   "dependencies": [
     "@radix-ui/react-checkbox"
   ],
+  "registryDependencies": [],
   "type": "components:ui",
   "files": [
     {

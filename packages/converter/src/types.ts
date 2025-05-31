@@ -1,6 +1,7 @@
 export interface ComponentData {
   name: string
-  dependencies: string[]
+  dependencies: string[] | undefined
+  registryDependencies: string[] | undefined
   files: ComponentFile[]
   type: string
 }

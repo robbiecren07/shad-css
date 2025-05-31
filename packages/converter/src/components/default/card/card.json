@@ -1,6 +1,7 @@
 {
   "name": "card",
   "dependencies": [],
+  "registryDependencies": [],
   "type": "components:ui",
   "files": [
     {

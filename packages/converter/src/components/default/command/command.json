@@ -3,6 +3,9 @@
   "dependencies": [
     "cmdk@1.0.0"
   ],
+  "registryDependencies": [
+    "dialog"
+  ],
   "type": "components:ui",
   "files": [
     {

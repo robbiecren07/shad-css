@@ -1,0 +1,16 @@
+.id > :not([hidden]) ~ :not([hidden]) {
+  margin-top: calc(0.5rem * calc(1 - 0));
+  margin-bottom: calc(0.5rem * 0);
+}
+.formLabelError {
+  color: hsl(var(--destructive));
+}
+.formDescription {
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground));
+}
+.body {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: hsl(var(--destructive));
+}

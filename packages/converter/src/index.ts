@@ -81,6 +81,7 @@ async function convert(componentName: string, style: string) {
     const jsonContent = await createJsonFile(
       componentName,
       componentData.dependencies,
+      componentData.registryDependencies,
       formattedTsx,
       formattedCss
     )

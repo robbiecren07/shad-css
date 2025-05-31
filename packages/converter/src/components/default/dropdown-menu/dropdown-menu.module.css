@@ -1,0 +1,201 @@
+.dropdownMenuSubTrigger {
+  display: flex;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: calc(var(--radius) - 4px);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.dropdownMenuSubTrigger:focus {
+  background-color: hsl(var(--accent));
+}
+.dropdownMenuSubTrigger[data-state="open"] {
+  background-color: hsl(var(--accent));
+}
+.dropdownMenuSubTriggerInset {
+  padding-left: 2rem;
+}
+.dropdownMenuSubTriggerChevronRight {
+  margin-left: auto;
+  height: 1rem;
+  width: 1rem;
+}
+.dropdownMenuSubContent {
+  z-index: 50;
+  min-width: 8rem;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+  border-width: 1px;
+  background-color: hsl(var(--popover));
+  padding: 0.25rem;
+  color: hsl(var(--popover-foreground));
+  box-shadow:
+    0 0 #0000,
+    0 0 #0000,
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+.dropdownMenuSubContent[data-state="open"] {
+  animation-name: enter;
+  animation-duration: 150ms;
+}
+.dropdownMenuSubContent[data-state="closed"] {
+  animation-name: exit;
+  animation-duration: 150ms;
+}
+.dropdownMenuSubContent[data-state="open"] {
+}
+.dropdownMenuSubContent[data-state="closed"] {
+}
+.dropdownMenuSubContent[data-state="open"] {
+}
+.dropdownMenuSubContent[data-side="bottom"] {
+}
+.dropdownMenuSubContent[data-side="left"] {
+}
+.dropdownMenuSubContent[data-side="right"] {
+}
+.dropdownMenuSubContent[data-side="top"] {
+}
+.dropdownMenuContent {
+  z-index: 50;
+  min-width: 8rem;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+  border-width: 1px;
+  background-color: hsl(var(--popover));
+  padding: 0.25rem;
+  color: hsl(var(--popover-foreground));
+  box-shadow:
+    0 0 #0000,
+    0 0 #0000,
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+.dropdownMenuContent[data-state="open"] {
+  animation-name: enter;
+  animation-duration: 150ms;
+}
+.dropdownMenuContent[data-state="closed"] {
+  animation-name: exit;
+  animation-duration: 150ms;
+}
+.dropdownMenuContent[data-state="open"] {
+}
+.dropdownMenuContent[data-state="closed"] {
+}
+.dropdownMenuContent[data-state="open"] {
+}
+.dropdownMenuContent[data-side="bottom"] {
+}
+.dropdownMenuContent[data-side="left"] {
+}
+.dropdownMenuContent[data-side="right"] {
+}
+.dropdownMenuContent[data-side="top"] {
+}
+.dropdownMenuItem {
+  position: relative;
+  display: flex;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: calc(var(--radius) - 4px);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.dropdownMenuItem:focus {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.dropdownMenuItem[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.dropdownMenuCheckboxItem {
+  position: relative;
+  display: flex;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: calc(var(--radius) - 4px);
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  padding-left: 2rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.dropdownMenuCheckboxItem:focus {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.dropdownMenuCheckboxItem[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.dropdownMenuCheckboxItemSpan {
+  position: absolute;
+  left: 0.5rem;
+  display: flex;
+  height: 0.875rem;
+  width: 0.875rem;
+  align-items: center;
+  justify-content: center;
+}
+.dropdownMenuCheckboxItemCheck {
+  height: 1rem;
+  width: 1rem;
+}
+.dropdownMenuRadioItemCircle {
+  height: 0.5rem;
+  width: 0.5rem;
+  fill: currentColor;
+}
+.dropdownMenuLabel {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+}
+.dropdownMenuSeparator {
+  margin-left: -0.25rem;
+  margin-right: -0.25rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  height: 1px;
+  background-color: hsl(var(--muted));
+}
+.dropdownMenuShortcut {
+  margin-left: auto;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}

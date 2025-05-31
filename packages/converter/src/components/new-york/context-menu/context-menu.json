@@ -3,6 +3,7 @@
   "dependencies": [
     "@radix-ui/react-context-menu"
   ],
+  "registryDependencies": [],
   "type": "components:ui",
   "files": [
     {
