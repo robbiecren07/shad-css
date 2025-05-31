@@ -1,10 +1,13 @@
 import ts from 'typescript'
+import { findCvaExpressions } from './findCvaExpressions'
 import { findClassNameExpressions } from './findClassNameExpressions'
 import { tailwindToCss } from './tailwindToCss'
-import { injectStylesImport } from './injectStylesImport'
+import { transformCvaVariants } from './transforms/transformCvaVariants'
+import { transformClassNames } from './transforms/transformClassNames'
 import { formatClassName } from './formatters'
-import { transformClassExpression } from './transforms/transformClassExpression'
-import { removeForbiddenApplyUtils } from './helpers'
+import { injectStylesImport } from './injectStylesImport'
+import { capitalize, removeForbiddenApplyUtils, toCamelCase } from './helpers'
+import { FORBIDDEN_CLASS_NAMES } from '@/lib/constants'
 
 /**
  * Converts a React component from inline Tailwind classes to CSS Modules format.
@@ -34,24 +37,65 @@ export async function convertComponent(
     ts.ScriptKind.TSX
   )
 
-  // Step 1: Extract class names from the component
+  const cvaBlocks = findCvaExpressions(sourceFile)
+
+  const cssSnippets: string[] = []
+  const classReplacementMap: Record<string, string> = {}
+
+  // Step 1: Handle class-variance-authority (cva) blocks
+  // This extracts cva calls and prepares CSS class names based on the component name.
+  // E.g. buttonBase, buttonDestructive, buttonOutline, etc.
+  if (cvaBlocks.length > 0) {
+    for (const cva of cvaBlocks) {
+      // Handle base class
+      const baseClassName = toCamelCase(`${componentName.toLowerCase()}Base`)
+      const safeBase = removeForbiddenApplyUtils(cva.baseClassName)
+      cssSnippets.push(`.${baseClassName} {\n  @apply ${safeBase};\n}`)
+      classReplacementMap[cva.baseClassName] = `styles.${baseClassName}`
+
+      // Handle each variant
+      for (const variantKey in cva.variants) {
+        for (const variantValue in cva.variants[variantKey]) {
+          const tailwindString = cva.variants[variantKey][variantValue]
+          const safeVariant = removeForbiddenApplyUtils(tailwindString)
+          const cssClass = toCamelCase(`${componentName}${capitalize(variantValue)}`)
+          cssSnippets.push(`.${cssClass} {\n  @apply ${safeVariant};\n}`)
+          classReplacementMap[tailwindString] = `styles.${cssClass}`
+        }
+      }
+
+      // --- Optionally: Replace the original cva call in tsxContent ---
+      // Do a string replace, or manipulate AST directly to rewrite:
+      //   cva("...", { variants: ... }) -> cva(styles.buttonBase, { variants: { ... } })
+      //   ...with styles.buttonDestructive, etc
+      // You can use ts.transform or a regex/string replace if you prefer for now.
+    }
+  }
+
+  // Step 2: Extract class names from the component
   // This creates a map of display names to their class name usages
   const classMap = findClassNameExpressions(sourceFile)
 
-  // Step 2: Generate CSS module styles and replacement map
+  // Step 3: Generate CSS module styles and replacement map
   // - cssSnippets: Array of CSS rules for each class
   // - classReplacementMap: Map of original class names to CSS module references
-  const cssSnippets: string[] = []
-  const classReplacementMap: Record<string, string> = {}
 
   // Create a map of class names to their usages
   for (const [displayName, usages] of Object.entries(classMap)) {
     for (const { class: className, hint } of usages) {
+      // Skip empty or forbidden class names
+      if (!className || FORBIDDEN_CLASS_NAMES.includes(className)) continue
+
       // Normalize the hint to ensure consistent formatting
       const cssKey = formatClassName(displayName, hint)
+
       if (!classReplacementMap[className]) {
-        // Remove forbidden classes
+        // Remove any forbidden @apply utils (optional extra filtering)
         const safeClassName = removeForbiddenApplyUtils(className)
+
+        // Only output if still safe (in case removeForbiddenApplyUtils returns empty)
+        if (!safeClassName) continue
+
         // Build CSS snippet
         cssSnippets.push(`.${cssKey} {\n  @apply ${safeClassName};\n}`)
         classReplacementMap[className] = `styles.${cssKey}`
@@ -59,69 +103,39 @@ export async function convertComponent(
     }
   }
 
-  // Step 3: Clean and compile CSS
+  // Step 4: Clean and compile CSS
   // - Join CSS snippets into a single string
   // - Process Tailwind variables and utilities
   const rawCss = cssSnippets.join('\n\n')
   const compiledCss = await tailwindToCss(rawCss)
 
-  // Step 4: Create AST transformer for className replacements
+  // Step 5: Create AST transformer for className + cva replacements
   // - Set up TypeScript printer for generating transformed code
   // - Define transformer to replace class names with CSS module references
   const printer = ts.createPrinter()
 
-  const transformer = <T extends ts.Node>(context: ts.TransformationContext) => {
-    const visit = (node: ts.Node): ts.Node => {
-      // Look for JSXAttribute className
-      if (ts.isJsxAttribute(node) && node.name.getText() === 'className' && node.initializer) {
-        const init = node.initializer
+  const transforms = [
+    transformClassNames(classReplacementMap), // For JSX className replacements
+    transformCvaVariants(componentName), // For cva() to styles.xxx
+  ]
 
-        // case: className="..."
-        if (ts.isStringLiteral(init)) {
-          const replacement = classReplacementMap[init.text]
-          if (replacement) {
-            // Replace with styles object reference
-            return ts.factory.updateJsxAttribute(
-              node,
-              node.name,
-              ts.factory.createJsxExpression(undefined, ts.factory.createIdentifier(replacement))
-            )
-          }
-        }
-
-        // case: className={cn(...)} or className={...}
-        if (ts.isJsxExpression(init) && init.expression) {
-          const transformed = transformClassExpression(init.expression, classReplacementMap)
-          // Replace with styles object reference
-          return ts.factory.updateJsxAttribute(
-            node,
-            node.name,
-            ts.factory.createJsxExpression(undefined, transformed)
-          )
-        }
-      }
-
-      // Recursively visit child nodes
-      return ts.visitEachChild(node, visit, context)
-    }
-
-    // Return a visitor function that applies the transformation
-    return (node: T) => ts.visitNode(node, visit)
+  // Apply the transformations to the source file
+  let transformed: ts.SourceFile = sourceFile
+  for (const t of transforms) {
+    transformed = ts.transform(transformed, [t]).transformed[0] as ts.SourceFile
   }
 
-  // Apply AST transformation
-  // - Transform the source file to replace class names with CSS module references
-  // - Generate the transformed TSX code using the printer
-  const result = ts.transform(sourceFile, [transformer])
-  const transformedTsx = printer.printFile(result.transformed[0] as ts.SourceFile)
+  // Generate the transformed TSX content
+  const transformedTsx = printer.printFile(transformed as ts.SourceFile)
 
-  // Step 5: Inject CSS module import
+  // Step 6: Inject CSS module import
   // - Add import statement for the generated CSS module
   // - Place import at the bottom of the existing import list
   const finalTsx = injectStylesImport(
     transformedTsx,
     `./${componentName}.module.css`,
-    `${componentName}.tsx`
+    `${componentName}.tsx`,
+    componentName
   )
 
   return {

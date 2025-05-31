@@ -1,4 +1,4 @@
-import { FORBIDDEN_APPLY_UTILITIES } from '@/lib/constants'
+import { FORBIDDEN_CLASS_NAMES } from '@/lib/constants'
 
 /**
  * Normalizes a component tag name to a semantic hint string.
@@ -91,12 +91,16 @@ export function normalizePostCssOutput(css: string): string {
  */
 export function removeForbiddenApplyUtils(classList: string): string {
   const classes = classList.split(/\s+/)
-  const filtered = classes.filter((cls) => !FORBIDDEN_APPLY_UTILITIES.includes(cls))
-  const removed = classes.filter((cls) => FORBIDDEN_APPLY_UTILITIES.includes(cls))
+  const filtered = classes.filter((cls) => !FORBIDDEN_CLASS_NAMES.includes(cls))
+  const removed = classes.filter((cls) => FORBIDDEN_CLASS_NAMES.includes(cls))
 
   if (removed.length > 0) {
     console.warn(`[shad-css] Skipping @apply for: ${removed.join(', ')}`)
   }
 
   return filtered.join(' ')
+}
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }

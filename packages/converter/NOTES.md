@@ -25,17 +25,20 @@ this should not be an issue placing it in the same `ui` folder as shadcn (if the
 
 ### Components to address
 
-- alert-dialog
-- alert
-- badge
-- button
-- calendar
-- carousel
-- chart
-- label
-- nevigation-menu
-- pagination
-- sonner
-- switch
-- toggle-group
+- alert-dialog        # ⚠️ possibly resolved with update in `transformClassExpression()`
+- alert               # ⚠️ possibly with `findCvaExpressions()`
+- badge               # ⚠️ possibly with `findCvaExpressions()`
+- button              # ⚠️ possibly with `findCvaExpressions()`
+- calendar            # ❌ needs a custom converter built
+- carousel            # ❌ might be able to extend the general converter
+- chart               # ❌ might be able to extend the general converter
+- label               # ⚠️ possibly with `findCvaExpressions()`
+- nevigation-menu     # ⚠️ possibly with `findCvaExpressions()` - but missing group styles
+- pagination          # ❌ might be able to extend `findCvaExpressions()` to handle this
+- sonner              # ❌ needs a custom converter built
+- toggle              # ⚠️ possibly with `findCvaExpressions()`
+- toggle-group        # ⚠️ possibly with `findCvaExpressions()`
 
+## Testing
+
+All components and styles need to be tested. This will happen once the CLI is built.

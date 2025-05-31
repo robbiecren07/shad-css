@@ -1,3 +1,4 @@
+import { NEEDS_BUTTON_STYLES, NEEDS_TOGGLE_STYLES } from '@/lib/constants'
 import ts from 'typescript'
 
 /**
@@ -20,7 +21,8 @@ import ts from 'typescript'
 export function injectStylesImport(
   sourceText: string,
   modulePath: string = './Component.module.css',
-  fileName: string = 'index.tsx'
+  fileName: string = 'index.tsx',
+  componentName?: string
 ): string {
   // Create TypeScript source file from input text
   // - Used for AST manipulation and printing
@@ -40,6 +42,20 @@ export function injectStylesImport(
     undefined,
     ts.factory.createImportClause(false, ts.factory.createIdentifier('styles'), undefined),
     ts.factory.createStringLiteral(modulePath)
+  )
+
+  // Optionally create the buttonStyles import
+  // (You can make the path dynamic if you need, for now, it's hardcoded)
+  const buttonStylesImport = ts.factory.createImportDeclaration(
+    undefined,
+    ts.factory.createImportClause(false, ts.factory.createIdentifier('buttonStyles'), undefined),
+    ts.factory.createStringLiteral('@/registry/new-york/ui/button/button.module.css')
+  )
+
+  const toggleStylesImport = ts.factory.createImportDeclaration(
+    undefined,
+    ts.factory.createImportClause(false, ts.factory.createIdentifier('toggleStyles'), undefined),
+    ts.factory.createStringLiteral('@/registry/new-york/ui/toggle/toggle.module.css')
   )
 
   // Prepare for statement processing
@@ -63,16 +79,26 @@ export function injectStylesImport(
     // Insert styles import after imports but before other statements
     if (!inserted && !ts.isImportDeclaration(stmt)) {
       statements.push(stylesImport)
+      // Only inject buttonStyles import for those that need it
+      if (componentName && NEEDS_BUTTON_STYLES.includes(componentName)) {
+        statements.push(buttonStylesImport)
+      } else if (componentName && NEEDS_TOGGLE_STYLES.includes(componentName)) {
+        statements.push(toggleStylesImport)
+      }
       inserted = true
     }
 
     statements.push(stmt)
   }
 
-  // Add styles import at the end if no other statements exist
-  // This handles empty files or files with no imports
+  // If we haven't inserted imports yet (e.g. all lines were imports or empty), add them now
   if (!inserted) {
     statements.push(stylesImport)
+    if (componentName && NEEDS_BUTTON_STYLES.includes(componentName)) {
+      statements.push(buttonStylesImport)
+    } else if (componentName && NEEDS_TOGGLE_STYLES.includes(componentName)) {
+      statements.push(toggleStylesImport)
+    }
   }
 
   // Generate updated source text

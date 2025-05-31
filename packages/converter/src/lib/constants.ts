@@ -26,7 +26,20 @@ export const basicHtmlTags = new Set([
   'aside',
 ])
 
-export const FORBIDDEN_APPLY_UTILITIES = ['peer', 'group']
+// These are class names that should not be used in the tailwind to css converter
+export const FORBIDDEN_CLASS_NAMES = [
+  'peer',
+  'group',
+  'peer-disabled',
+  'group-disabled',
+  'variant',
+  'size',
+  'buttonVariants',
+  'buttonBase',
+  'buttonOutline',
+  'buttonDestructive',
+  // add any other cva/prop names or keys you discover, or automate by regex if needed
+]
 
 export const TAILWIND_DEFAULT_VARS: Record<string, string> = {
   '--tw-border-spacing-x': '0',
@@ -85,3 +98,7 @@ export const TAILWIND_DEFAULT_VARS: Record<string, string> = {
 // these are shadcn components that do not have a direct Tailwind CSS equivalent
 // and are not supported by the converter
 export const EXCLUDED_COMPONENTS = ['aspect-ratio', 'collapsible']
+
+export const NEEDS_BUTTON_STYLES = ['alert-dialog']
+
+export const NEEDS_TOGGLE_STYLES = ['toggle-group']

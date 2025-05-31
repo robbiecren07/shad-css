@@ -4,7 +4,16 @@ import animate from 'tailwindcss-animate'
 module.exports = {
   mode: 'jit',
   content: ['./src/**/*.{html,js,ts,tsx,jsx}', './packages/converter/src/**/*.{ts,tsx}'],
-  plugins: [animate],
+  plugins: [
+    animate,
+    function ({ addUtilities }) {
+      addUtilities({
+        '.origin-top-center': {
+          'transform-origin': 'top center',
+        },
+      })
+    },
+  ],
   theme: {
     extend: {
       borderRadius: {

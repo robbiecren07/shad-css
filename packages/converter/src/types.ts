@@ -1,3 +1,5 @@
+import type ts from 'typescript'
+
 export interface ComponentData {
   name: string
   dependencies: string[] | undefined
@@ -20,4 +22,11 @@ export interface ClassNameUsage {
   class: string
   hint: string
   loc: number
+}
+
+export interface CvaCallInfo {
+  variableName: string
+  baseClassName: string
+  variants: Record<string, Record<string, string>> // {variant: {default: 'tw', destructive: 'tw', ...}}
+  node: ts.CallExpression
 }
