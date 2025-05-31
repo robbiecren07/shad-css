@@ -36,33 +36,60 @@
   background-color: hsl(var(--popover));
   padding: 0.25rem;
   color: hsl(var(--popover-foreground));
+  --tw-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored:
+    0 10px 15px -3px var(--tw-shadow-color),
+    0 4px 6px -4px var(--tw-shadow-color);
   box-shadow:
-    0 0 #0000,
-    0 0 #0000,
-    0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -4px rgb(0 0 0 / 0.1);
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
+}
+.dropdownMenuSubContent[data-state="open"] {
+  animation: enter 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.dropdownMenuSubContent[data-state="closed"] {
+  animation: exit 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .dropdownMenuSubContent[data-state="open"] {
   animation-name: enter;
   animation-duration: 150ms;
+  --tw-enter-opacity: initial;
+  --tw-enter-scale: initial;
+  --tw-enter-rotate: initial;
+  --tw-enter-translate-x: initial;
+  --tw-enter-translate-y: initial;
 }
 .dropdownMenuSubContent[data-state="closed"] {
   animation-name: exit;
   animation-duration: 150ms;
+  --tw-exit-opacity: initial;
+  --tw-exit-scale: initial;
+  --tw-exit-rotate: initial;
+  --tw-exit-translate-x: initial;
+  --tw-exit-translate-y: initial;
+  --tw-exit-opacity: 0;
 }
 .dropdownMenuSubContent[data-state="open"] {
+  --tw-enter-opacity: 0;
 }
 .dropdownMenuSubContent[data-state="closed"] {
+  --tw-exit-scale: 0.95;
 }
 .dropdownMenuSubContent[data-state="open"] {
+  --tw-enter-scale: 0.95;
 }
 .dropdownMenuSubContent[data-side="bottom"] {
+  --tw-enter-translate-y: -0.5rem;
 }
 .dropdownMenuSubContent[data-side="left"] {
+  --tw-enter-translate-x: 0.5rem;
 }
 .dropdownMenuSubContent[data-side="right"] {
+  --tw-enter-translate-x: -0.5rem;
 }
 .dropdownMenuSubContent[data-side="top"] {
+  --tw-enter-translate-y: 0.5rem;
 }
 .dropdownMenuContent {
   z-index: 50;
@@ -73,33 +100,58 @@
   background-color: hsl(var(--popover));
   padding: 0.25rem;
   color: hsl(var(--popover-foreground));
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored:
+    0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow:
-    0 0 #0000,
-    0 0 #0000,
-    0 4px 6px -1px rgb(0 0 0 / 0.1),
-    0 2px 4px -2px rgb(0 0 0 / 0.1);
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
+}
+.dropdownMenuContent[data-state="open"] {
+  animation: enter 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.dropdownMenuContent[data-state="closed"] {
+  animation: exit 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .dropdownMenuContent[data-state="open"] {
   animation-name: enter;
   animation-duration: 150ms;
+  --tw-enter-opacity: initial;
+  --tw-enter-scale: initial;
+  --tw-enter-rotate: initial;
+  --tw-enter-translate-x: initial;
+  --tw-enter-translate-y: initial;
 }
 .dropdownMenuContent[data-state="closed"] {
   animation-name: exit;
   animation-duration: 150ms;
+  --tw-exit-opacity: initial;
+  --tw-exit-scale: initial;
+  --tw-exit-rotate: initial;
+  --tw-exit-translate-x: initial;
+  --tw-exit-translate-y: initial;
+  --tw-exit-opacity: 0;
 }
 .dropdownMenuContent[data-state="open"] {
+  --tw-enter-opacity: 0;
 }
 .dropdownMenuContent[data-state="closed"] {
+  --tw-exit-scale: 0.95;
 }
 .dropdownMenuContent[data-state="open"] {
+  --tw-enter-scale: 0.95;
 }
 .dropdownMenuContent[data-side="bottom"] {
+  --tw-enter-translate-y: -0.5rem;
 }
 .dropdownMenuContent[data-side="left"] {
+  --tw-enter-translate-x: 0.5rem;
 }
 .dropdownMenuContent[data-side="right"] {
+  --tw-enter-translate-x: -0.5rem;
 }
 .dropdownMenuContent[data-side="top"] {
+  --tw-enter-translate-y: 0.5rem;
 }
 .dropdownMenuItem {
   position: relative;
@@ -198,4 +250,100 @@
   line-height: 1rem;
   letter-spacing: 0.1em;
   opacity: 0.6;
+}
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(
+        var(--tw-enter-translate-x, 0),
+        var(--tw-enter-translate-y, 0),
+        0
+      )
+      scale3d(
+        var(--tw-enter-scale, 1),
+        var(--tw-enter-scale, 1),
+        var(--tw-enter-scale, 1)
+      )
+      rotate(var(--tw-enter-rotate, 0));
+  }
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(
+        var(--tw-exit-translate-x, 0),
+        var(--tw-exit-translate-y, 0),
+        0
+      )
+      scale3d(
+        var(--tw-exit-scale, 1),
+        var(--tw-exit-scale, 1),
+        var(--tw-exit-scale, 1)
+      )
+      rotate(var(--tw-exit-rotate, 0));
+  }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(
+        var(--tw-enter-translate-x, 0),
+        var(--tw-enter-translate-y, 0),
+        0
+      )
+      scale3d(
+        var(--tw-enter-scale, 1),
+        var(--tw-enter-scale, 1),
+        var(--tw-enter-scale, 1)
+      )
+      rotate(var(--tw-enter-rotate, 0));
+  }
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes exit {
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(
+        var(--tw-exit-translate-x, 0),
+        var(--tw-exit-translate-y, 0),
+        0
+      )
+      scale3d(
+        var(--tw-exit-scale, 1),
+        var(--tw-exit-scale, 1),
+        var(--tw-exit-scale, 1)
+      )
+      rotate(var(--tw-exit-rotate, 0));
+  }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }

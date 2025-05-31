@@ -1,12 +1,19 @@
 # shad-css
 
-A toolset that enables developers to use Shadcn/ui components in their projects without Tailwind CSS.
+A toolset that enables developers to use [Shadcn/ui](https://ui.shadcn.com/) components in their projects without Tailwind CSS.
 
 ## About
 
 This project is not affiliated with or endorsed by Shadcn/ui. We are simply providing a tool to help developers who want to use Shadcn/ui's excellent components but cannot or do not want to use Tailwind CSS in their projects.
 
 The component designs and implementations are sourced from Shadcn/ui and Radix UI. This project converts these components to use CSS Modules instead of inline Tailwind CSS classes, while preserving their original functionality and design patterns.
+
+### Note
+
+The conversion process currently preserves Tailwind’s `--tw-*` custom properties to ensure accurate styles and animations.
+We plan to offer an option to remove Tailwind variables in a future release.
+
+These variables are MIT-licensed and come from [Tailwind CSS](https://tailwindcss.com/).
 
 ## Packages
 

@@ -3,7 +3,7 @@ import animate from 'tailwindcss-animate'
 
 module.exports = {
   mode: 'jit',
-  content: ['./src/**/*.{html,ts,tsx}'],
+  content: ['./src/**/*.{html,js,ts,tsx,jsx}', './packages/converter/src/**/*.{ts,tsx}'],
   plugins: [animate],
   theme: {
     extend: {
@@ -81,10 +81,71 @@ module.exports = {
             height: '0',
           },
         },
+        'caret-blink': {
+          '0%, 70%, 100%': {
+            opacity: '1',
+          },
+          '20%, 50%': {
+            opacity: '0',
+          },
+        },
+
+        // tailwindcss-animate animations
+        enter: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        exit: {
+          '0%': { opacity: '1', transform: 'scale(1)' },
+          '100%': { opacity: '0', transform: 'scale(0.95)' },
+        },
+        'fade-in-0': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'fade-out-0': {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        'zoom-in-95': {
+          '0%': { transform: 'scale(0.95)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        'zoom-out-95': {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(0.95)' },
+        },
+        'slide-in-from-top-2': {
+          '0%': { transform: 'translateY(-0.5rem)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        'slide-in-from-bottom-2': {
+          '0%': { transform: 'translateY(0.5rem)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        'slide-in-from-left-2': {
+          '0%': { transform: 'translateX(-0.5rem)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        'slide-in-from-right-2': {
+          '0%': { transform: 'translateX(0.5rem)' },
+          '100%': { transform: 'translateX(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
+        in: 'enter 0.15s cubic-bezier(0.16, 1, 0.3, 1) both',
+        out: 'exit 0.15s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'fade-in-0': 'fade-in-0 0.15s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'fade-out-0': 'fade-out-0 0.15s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'zoom-in-95': 'zoom-in-95 0.15s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'zoom-out-95': 'zoom-out-95 0.15s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'slide-in-from-top-2': 'slide-in-from-top-2 0.2s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'slide-in-from-bottom-2': 'slide-in-from-bottom-2 0.2s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'slide-in-from-left-2': 'slide-in-from-left-2 0.2s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'slide-in-from-right-2': 'slide-in-from-right-2 0.2s cubic-bezier(0.16, 1, 0.3, 1) both',
       },
     },
   },

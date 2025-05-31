@@ -1,0 +1,20 @@
+{
+  "name": "switch",
+  "dependencies": [
+    "@radix-ui/react-switch"
+  ],
+  "registryDependencies": [],
+  "type": "components:ui",
+  "files": [
+    {
+      "type": "tsx",
+      "name": "index.tsx",
+      "content": "'use client';\n\nimport * as React from 'react';\nimport * as SwitchPrimitives from '@radix-ui/react-switch';\nimport { cn } from '@/lib/utils';\nimport styles from './switch.module.css';\n\nconst Switch = React.forwardRef<\n  React.ElementRef<typeof SwitchPrimitives.Root>,\n  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>\n>(({ className, ...props }, ref) => (\n  <SwitchPrimitives.Root\n    className={cn(styles.switch, className)}\n    {...props}\n    ref={ref}\n  >\n    <SwitchPrimitives.Thumb className={cn(styles.switchThumb)} />\n  </SwitchPrimitives.Root>\n));\nSwitch.displayName = SwitchPrimitives.Root.displayName;\n\nexport { Switch };\n"
+    },
+    {
+      "type": "css",
+      "name": "switch.module.css",
+      "content": ".switch {\n  display: inline-flex;\n  height: 1.5rem;\n  width: 2.75rem;\n  flex-shrink: 0;\n  cursor: pointer;\n  align-items: center;\n  border-radius: 9999px;\n  border-width: 2px;\n  border-color: transparent;\n  transition-property:\n    color, background-color, border-color, text-decoration-color, fill, stroke;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n.switch:focus-visible {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0\n    var(--tw-ring-offset-width) var(--tw-ring-offset-color);\n  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0\n    calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow), var(--tw-ring-shadow),\n    var(--tw-shadow, 0 0 #0000);\n  --tw-ring-color: hsl(var(--ring));\n  --tw-ring-offset-width: 2px;\n  --tw-ring-offset-color: hsl(var(--background));\n}\n.switch:disabled {\n  cursor: not-allowed;\n  opacity: 0.5;\n}\n.switch[data-state=\"checked\"] {\n  background-color: hsl(var(--primary));\n}\n.switch[data-state=\"unchecked\"] {\n  background-color: hsl(var(--input));\n}\n.switchThumb {\n  pointer-events: none;\n  display: block;\n  height: 1.25rem;\n  width: 1.25rem;\n  border-radius: 9999px;\n  background-color: hsl(var(--background));\n  --tw-shadow:\n    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);\n  --tw-shadow-colored:\n    0 10px 15px -3px var(--tw-shadow-color),\n    0 4px 6px -4px var(--tw-shadow-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),\n    var(--tw-shadow);\n  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0\n    var(--tw-ring-offset-width) var(--tw-ring-offset-color);\n  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0\n    calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow), var(--tw-ring-shadow),\n    var(--tw-shadow, 0 0 #0000);\n  transition-property: transform;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n.switchThumb[data-state=\"checked\"] {\n  --tw-translate-x: 1.25rem;\n  transform: translate(var(--tw-translate-x), var(--tw-translate-y))\n    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))\n    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));\n}\n.switchThumb[data-state=\"unchecked\"] {\n  --tw-translate-x: 0px;\n  transform: translate(var(--tw-translate-x), var(--tw-translate-y))\n    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))\n    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));\n}\n"
+    }
+  ]
+}

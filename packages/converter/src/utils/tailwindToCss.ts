@@ -1,7 +1,8 @@
 import postcss from 'postcss'
 import tailwindcss from 'tailwindcss'
 import postcssNested from 'postcss-nested'
-import { cleanTailwindVars } from './cleanTailwindVars'
+import { moveKeyframesToBottomPlugin } from '@/lib/postcssPlugins'
+//import { cleanTailwindVars } from './cleanTailwindVars'
 import { normalizePostCssOutput } from './helpers'
 
 /**
@@ -28,17 +29,22 @@ export async function tailwindToCss(cssInput: string): Promise<string> {
       },
     }),
     postcssNested,
+    moveKeyframesToBottomPlugin,
   ]).process(cssInput, { from: undefined })
 
+  /**
+   * Note: Currently, removing Tailwind-specific variables creates issues with
+   * the generated CSS, keyframes, animations, and other utilities.
+   */
   // Clean up Tailwind-specific variables
   // - Removes --tw-* custom properties
   // - Replaces var(...) references with actual values
-  const cleanedCss = await cleanTailwindVars(result.css)
+  //const cleanedCss = await cleanTailwindVars(result.css)
 
   // Normalize CSS formatting
   // - Standardizes whitespace and line breaks
   // - Prepares for consistent Prettier processing
-  const compactCss = normalizePostCssOutput(cleanedCss)
+  const compactCss = normalizePostCssOutput(result.css)
 
   return compactCss
 }

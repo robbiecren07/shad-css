@@ -22,3 +22,20 @@ it does not like that we add those tailwind classes to `@apply` since its a cust
 in our converted component's json file and then rework it to be the correct path for the user's component folder.
 it will most liekly be `import { Label } from '@/components/ui/label';`. Since we are going to be using component folders,
 this should not be an issue placing it in the same `ui` folder as shadcn (if the user currently has shadcn components in their project).
+
+### Components to address
+
+- alert-dialog
+- alert
+- badge
+- button
+- calendar
+- carousel
+- chart
+- label
+- nevigation-menu
+- pagination
+- sonner
+- switch
+- toggle-group
+

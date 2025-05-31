@@ -1,0 +1,20 @@
+{
+  "name": "resizable",
+  "dependencies": [
+    "react-resizable-panels"
+  ],
+  "registryDependencies": [],
+  "type": "components:ui",
+  "files": [
+    {
+      "type": "tsx",
+      "name": "index.tsx",
+      "content": "'use client';\n\nimport { GripVertical } from 'lucide-react';\nimport * as ResizablePrimitive from 'react-resizable-panels';\nimport { cn } from '@/lib/utils';\nimport styles from './resizable.module.css';\n\nconst ResizablePanelGroup = ({\n  className,\n  ...props\n}: React.ComponentProps<typeof ResizablePrimitive.PanelGroup>) => (\n  <ResizablePrimitive.PanelGroup\n    className={cn(styles.resizablePanelGroup, className)}\n    {...props}\n  />\n);\n\nconst ResizablePanel = ResizablePrimitive.Panel;\n\nconst ResizableHandle = ({\n  withHandle,\n  className,\n  ...props\n}: React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> & {\n  withHandle?: boolean;\n}) => (\n  <ResizablePrimitive.PanelResizeHandle\n    className={cn(styles.resizableHandle, className)}\n    {...props}\n  >\n    {withHandle && (\n      <div className={styles.resizableHandleDiv}>\n        <GripVertical className={styles.resizableHandleGripVertical} />\n      </div>\n    )}\n  </ResizablePrimitive.PanelResizeHandle>\n);\n\nexport { ResizablePanelGroup, ResizablePanel, ResizableHandle };\n"
+    },
+    {
+      "type": "css",
+      "name": "resizable.module.css",
+      "content": ".resizablePanelGroup {\n  display: flex;\n  height: 100%;\n  width: 100%;\n}\n.resizablePanelGroup[data-panel-group-direction=\"vertical\"] {\n  flex-direction: column;\n}\n.resizableHandle {\n  position: relative;\n  display: flex;\n  width: 1px;\n  align-items: center;\n  justify-content: center;\n  background-color: hsl(var(--border));\n}\n.resizableHandle::after {\n  position: absolute;\n  top: 0px;\n  bottom: 0px;\n  left: 50%;\n  width: 0.25rem;\n  content: var(--tw-content);\n  --tw-translate-x: -50%;\n  transform: translate(var(--tw-translate-x), var(--tw-translate-y))\n    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))\n    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));\n}\n.resizableHandle:focus-visible {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0\n    var(--tw-ring-offset-width) var(--tw-ring-offset-color);\n  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0\n    calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow), var(--tw-ring-shadow),\n    var(--tw-shadow, 0 0 #0000);\n  --tw-ring-color: hsl(var(--ring));\n  --tw-ring-offset-width: 1px;\n}\n.resizableHandle[data-panel-group-direction=\"vertical\"] {\n  height: 1px;\n  width: 100%;\n}\n.resizableHandle[data-panel-group-direction=\"vertical\"]::after {\n  left: 0px;\n  height: 0.25rem;\n  width: 100%;\n  --tw-translate-y: -50%;\n  content: var(--tw-content);\n  --tw-translate-x: 0px;\n  transform: translate(var(--tw-translate-x), var(--tw-translate-y))\n    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))\n    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));\n}\n.resizableHandle[data-panel-group-direction=\"vertical\"] > div {\n  --tw-rotate: 90deg;\n  transform: translate(var(--tw-translate-x), var(--tw-translate-y))\n    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))\n    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));\n}\n.resizableHandleDiv {\n  z-index: 10;\n  display: flex;\n  height: 1rem;\n  width: 0.75rem;\n  align-items: center;\n  justify-content: center;\n  border-radius: calc(var(--radius) - 4px);\n  border-width: 1px;\n  background-color: hsl(var(--border));\n}\n.resizableHandleGripVertical {\n  height: 0.625rem;\n  width: 0.625rem;\n}\n"
+    }
+  ]
+}

@@ -22,8 +22,10 @@
   text-decoration-line: underline;
 }
 .accordionTriggerTrigger[data-state="open"] > svg {
-  transform: translate(0, 0) rotate(180deg) skewX(0) skewY(0) scaleX(1)
-    scaleY(1);
+  --tw-rotate: 180deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .accordionTriggerChevronDown {
   height: 1rem;
@@ -40,6 +42,16 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
+.accordionContent[data-state="closed"] {
+  animation: accordion-up 0.2s ease-out;
+}
+.accordionContent[data-state="open"] {
+  animation: accordion-down 0.2s ease-out;
+}
+.accordionContentDiv {
+  padding-bottom: 1rem;
+  padding-top: 0px;
+}
 @keyframes accordion-up {
   from {
     height: var(--radix-accordion-content-height);
@@ -48,9 +60,6 @@
     height: 0;
   }
 }
-.accordionContent[data-state="closed"] {
-  animation: accordion-up 0.2s ease-out;
-}
 @keyframes accordion-down {
   from {
     height: 0;
@@ -58,11 +67,4 @@
   to {
     height: var(--radix-accordion-content-height);
   }
-}
-.accordionContent[data-state="open"] {
-  animation: accordion-down 0.2s ease-out;
-}
-.accordionContentDiv {
-  padding-bottom: 1rem;
-  padding-top: 0px;
 }

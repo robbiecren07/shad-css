@@ -1,0 +1,13 @@
+.alertTitle {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.alertDescription {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.alertDescription p {
+  line-height: 1.625;
+}

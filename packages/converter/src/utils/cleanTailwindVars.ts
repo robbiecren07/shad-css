@@ -35,7 +35,7 @@ export async function cleanTailwindVars(css: string): Promise<string> {
       decl.value = decl.value.replace(/var\((--tw-[\w-]+)\)/g, (_, varName) =>
         expandVarValue(varName, localVars)
       )
-      
+
       // Handle var(--tw-*, fallback) with fallback values
       decl.value = decl.value.replace(
         /var\((--tw-[\w-]+),\s*([^)]+)\)/g,

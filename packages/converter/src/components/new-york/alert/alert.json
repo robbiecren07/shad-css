@@ -1,0 +1,18 @@
+{
+  "name": "alert",
+  "dependencies": [],
+  "registryDependencies": [],
+  "type": "components:ui",
+  "files": [
+    {
+      "type": "tsx",
+      "name": "index.tsx",
+      "content": "import * as React from 'react';\nimport { cva, type VariantProps } from 'class-variance-authority';\nimport { cn } from '@/lib/utils';\nimport styles from './alert.module.css';\n\nconst alertVariants = cva(\n  'relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',\n  {\n    variants: {\n      variant: {\n        default: 'bg-background text-foreground',\n        destructive:\n          'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n    },\n  },\n);\n\nconst Alert = React.forwardRef<\n  HTMLDivElement,\n  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>\n>(({ className, variant, ...props }, ref) => (\n  <div\n    ref={ref}\n    role=\"alert\"\n    className={cn(alertVariants({ variant }), className)}\n    {...props}\n  />\n));\nAlert.displayName = 'Alert';\n\nconst AlertTitle = React.forwardRef<\n  HTMLParagraphElement,\n  React.HTMLAttributes<HTMLHeadingElement>\n>(({ className, ...props }, ref) => (\n  <h5 ref={ref} className={cn(styles.alertTitle, className)} {...props} />\n));\nAlertTitle.displayName = 'AlertTitle';\n\nconst AlertDescription = React.forwardRef<\n  HTMLParagraphElement,\n  React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, ...props }, ref) => (\n  <div\n    ref={ref}\n    className={cn(styles.alertDescription, className)}\n    {...props}\n  />\n));\nAlertDescription.displayName = 'AlertDescription';\n\nexport { Alert, AlertTitle, AlertDescription };\n"
+    },
+    {
+      "type": "css",
+      "name": "alert.module.css",
+      "content": ".alertTitle {\n  margin-bottom: 0.25rem;\n  font-weight: 500;\n  line-height: 1;\n  letter-spacing: -0.025em;\n}\n.alertDescription {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n}\n.alertDescription p {\n  line-height: 1.625;\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+.chartId {
+  display: flex;
+  aspect-ratio: 16 / 9;
+  justify-content: center;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.chartId .recharts-cartesian-axis-tick text {
+  fill: hsl(var(--muted-foreground));
+}
+.chartId .recharts-cartesian-grid line[stroke="#ccc"] {
+  stroke: hsl(var(--border) / 0.5);
+}
+.chartId .recharts-curve.recharts-tooltip-cursor {
+  stroke: hsl(var(--border));
+}
+.chartId .recharts-dot[stroke="#fff"] {
+  stroke: transparent;
+}
+.chartId .recharts-layer {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.chartId .recharts-polar-grid [stroke="#ccc"] {
+  stroke: hsl(var(--border));
+}
+.chartId .recharts-radial-bar-background-sector {
+  fill: hsl(var(--muted));
+}
+.chartId .recharts-rectangle.recharts-tooltip-cursor {
+  fill: hsl(var(--muted));
+}
+.chartId .recharts-reference-line [stroke="#ccc"] {
+  stroke: hsl(var(--border));
+}
+.chartId .recharts-sector[stroke="#fff"] {
+  stroke: transparent;
+}
+.chartId .recharts-sector {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.chartId .recharts-surface {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.value {
+  font-weight: 500;
+}
+.nestLabel {
+  display: grid;
+  min-width: 8rem;
+  align-items: flex-start;
+  gap: 0.375rem;
+  border-radius: var(--radius);
+  border-width: 1px;
+  border-color: hsl(var(--border) / 0.5);
+  background-color: hsl(var(--background));
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  --tw-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored:
+    0 20px 25px -5px var(--tw-shadow-color),
+    0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow:
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
+}
+.nestLabelDiv {
+  display: grid;
+  gap: 0.375rem;
+}
+.indicatorColor {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+.indicatorColor > svg {
+  height: 0.625rem;
+  width: 0.625rem;
+  color: hsl(var(--muted-foreground));
+}
+.indicatorColor {
+  align-items: center;
+}
+.indicatorColorDiv {
+  flex-shrink: 0;
+  border-radius: 2px;
+  border-color: var(--color-border);
+  background-color: var(--color-bg);
+  height: 0.625rem;
+  width: 0.25rem;
+  width: 0px;
+  border-width: 1.5px;
+  border-style: dashed;
+  background-color: transparent;
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+  display: flex;
+  flex: 1 1 0%;
+  justify-content: space-between;
+  line-height: 1;
+}
+.indicatorColorNestLabel {
+  align-items: flex-end;
+}
+.indicatorColorSpan {
+  color: hsl(var(--muted-foreground));
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-weight: 500;
+  --tw-numeric-spacing: tabular-nums;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero)
+    var(--tw-numeric-figure) var(--tw-numeric-spacing)
+    var(--tw-numeric-fraction);
+  color: hsl(var(--foreground));
+}
+.chartLegendContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  padding-top: 0.75rem;
+}
+.itemConfig {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+.itemConfig > svg {
+  height: 0.75rem;
+  width: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+.itemConfigDiv {
+  height: 0.5rem;
+  width: 0.5rem;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
