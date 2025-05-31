@@ -81,3 +81,7 @@ export const TAILWIND_DEFAULT_VARS: Record<string, string> = {
   '--tw-contain-paint': '',
   '--tw-contain-style': '',
 }
+
+// these are shadcn components that do not have a direct Tailwind CSS equivalent
+// and are not supported by the converter
+export const EXCLUDED_COMPONENTS = ['aspect-ratio', 'collapsible']

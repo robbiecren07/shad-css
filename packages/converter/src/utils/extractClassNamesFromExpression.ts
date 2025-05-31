@@ -1,67 +1,103 @@
+import type { ExtractedClassName } from '@/types'
 import ts from 'typescript'
 
 /**
- * Recursively extracts class names from complex TypeScript expressions.
+ * Recursively extracts class names and their context from TypeScript expressions.
  *
  * This function handles various expression types that may contain class names:
- * - String literals and template literals
- * - Function calls with class name arguments
- * - Binary expressions (e.g., string concatenation)
- * - Conditional expressions (e.g., ternary operators)
- * - Object literals with class name properties
- * - Array literals with class name elements
+ * 1. Simple string literals and template literals
+ * 2. Function calls (e.g., cn(...))
+ * 3. Logical expressions (e.g., inset && "pl-8")
+ * 4. Ternary operators (e.g., inset ? "pl-8" : "pr-8")
+ * 5. Object literals with class name properties
+ * 6. Array literals with class name elements
+ * 7. Parenthesized expressions
+ *
+ * Each extracted class name includes:
+ * - The class name itself
+ * - An optional hint (e.g., "inset" in "inset && 'pl-8'")
+ * - The original expression context
  *
  * @param expr A TypeScript expression that may contain class names.
- * @returns An array of class names extracted from the expression.
+ * @returns An array of class names with their context information.
  */
-export function extractClassNamesFromExpression(expr: ts.Expression): string[] {
-  const classNames: string[] = []
+export function extractClassNamesFromExpression(expr: ts.Expression): ExtractedClassName[] {
+  const classNames: ExtractedClassName[] = []
 
-  // Handle different expression types
+  // Handle simple string literals and template literals
   if (ts.isStringLiteral(expr) || ts.isNoSubstitutionTemplateLiteral(expr)) {
-    // Handle simple string literals
-    classNames.push(expr.text)
+    // Direct class name reference
+    classNames.push({ class: expr.text })
   } else if (ts.isCallExpression(expr)) {
-    // Handle function calls
-    // Extract class names from all arguments
+    // Handle class utility functions (e.g., cn(...))
+    // Recursively extract classes from each argument
     for (const arg of expr.arguments) {
       if (ts.isExpression(arg)) {
         classNames.push(...extractClassNamesFromExpression(arg))
       }
     }
   } else if (ts.isBinaryExpression(expr)) {
-    // Handle binary operations (e.g., string concatenation)
-    // Extract class names from both operands
-    classNames.push(
-      ...extractClassNamesFromExpression(expr.left),
-      ...extractClassNamesFromExpression(expr.right)
-    )
+    // Handle logical expressions
+    if (expr.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
+      // Logical AND (e.g., inset && "pl-8" or inset && styles.foo)
+      // Extract hint from left side (e.g., "inset")
+      let hint: string | undefined
+      if (ts.isIdentifier(expr.left)) hint = expr.left.text
+      if (ts.isPropertyAccessExpression(expr.left)) hint = expr.left.name.text
+      
+      // Extract class from right side and attach hint
+      extractClassNamesFromExpression(expr.right).forEach((e) => {
+        classNames.push({ ...e, hint: hint ?? e.hint })
+      })
+    } else {
+      // For other binary operators, flatten both sides
+      classNames.push(
+        ...extractClassNamesFromExpression(expr.left),
+        ...extractClassNamesFromExpression(expr.right)
+      )
+    }
   } else if (ts.isConditionalExpression(expr)) {
-    // Handle conditional expressions (e.g., ternary operators)
-    // Extract class names from both branches
+    // Handle ternary operators (e.g., inset ? "pl-8" : "pr-8")
+    // Extract hint from condition (e.g., "inset")
+    let hint: string | undefined
+    if (ts.isIdentifier(expr.condition)) hint = expr.condition.text
+    if (ts.isPropertyAccessExpression(expr.condition)) hint = expr.condition.name.text
+    
+    // Process both true and false branches with the hint
     classNames.push(
-      ...extractClassNamesFromExpression(expr.whenTrue),
-      ...extractClassNamesFromExpression(expr.whenFalse)
+      ...extractClassNamesFromExpression(expr.whenTrue).map((e) => ({ ...e, hint })),
+      ...extractClassNamesFromExpression(expr.whenFalse).map((e) => ({ ...e, hint }))
     )
   } else if (ts.isObjectLiteralExpression(expr)) {
-    // Handle object literals
-    // Extract class names from property keys
+    // Handle object-style class expressions (e.g., { [inset && 'pl-8']: true })
     for (const prop of expr.properties) {
       if (ts.isPropertyAssignment(prop)) {
         const key = prop.name
+        let className: string | undefined
         if (ts.isIdentifier(key) || ts.isStringLiteral(key)) {
-          classNames.push(key.text)
+          className = key.text
+        }
+        if (className) {
+          // Try to infer hint from property initializer
+          let hint: string | undefined
+          if (ts.isIdentifier(prop.initializer)) {
+            hint = prop.initializer.text
+          }
+          classNames.push({ class: className, hint })
         }
       }
     }
   } else if (ts.isArrayLiteralExpression(expr)) {
-    // Handle array literals
-    // Extract class names from all elements
+    // Handle array literals (e.g., ["class1", "class2"])
     for (const el of expr.elements) {
       if (ts.isExpression(el)) {
         classNames.push(...extractClassNamesFromExpression(el))
       }
     }
+  } else if (ts.isParenthesizedExpression(expr)) {
+    // Handle parenthesized expressions (e.g., ("class1" && "class2"))
+    // Unwrap and process the inner expression
+    classNames.push(...extractClassNamesFromExpression(expr.expression))
   }
 
   return classNames

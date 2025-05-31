@@ -3,6 +3,7 @@
   "dependencies": [
     "@radix-ui/react-checkbox"
   ],
+  "type": "components:ui",
   "files": [
     {
       "type": "tsx",
@@ -14,6 +15,5 @@
       "name": "checkbox.module.css",
       "content": ".checkbox {\n  height: 1rem;\n  width: 1rem;\n  flex-shrink: 0;\n  border-radius: calc(var(--radius) - 4px);\n  border-width: 1px;\n  border-color: hsl(var(--primary));\n  box-shadow:\n    0 0 #0000,\n    0 0 #0000,\n    0 1px 3px 0 rgb(0 0 0 / 0.1),\n    0 1px 2px -1px rgb(0 0 0 / 0.1);\n}\n.checkbox:focus-visible {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n  box-shadow:\n    0 0 0 0px #fff,\n    0 0 0 calc(1px + 0px) hsl(var(--ring)),\n    0 0 #0000;\n}\n.checkbox:disabled {\n  cursor: not-allowed;\n  opacity: 0.5;\n}\n.checkbox[data-state=\"checked\"] {\n  background-color: hsl(var(--primary));\n  color: hsl(var(--primary-foreground));\n}\n.checkboxIndicator {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: currentColor;\n}\n.checkboxCheck {\n  height: 1rem;\n  width: 1rem;\n}\n"
     }
-  ],
-  "type": "components:ui"
+  ]
 }

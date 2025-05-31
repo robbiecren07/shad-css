@@ -26,31 +26,34 @@ export async function formatCode(code: string, parser: 'babel' | 'css' = 'babel'
 }
 
 /**
- * Generates a CSS class name from a component name and optional hint.
+ * Formats a component class name with optional hint.
  *
  * This function:
- * 1. Converts component name to camelCase
- * 2. If hint is provided:
- *    - Converts hint to PascalCase
- *    - Appends hint if not already present in component name
+ * 1. Converts the component name to camelCase
+ * 2. Processes the hint:
+ *    - Converts to PascalCase
+ *    - Appends to the base name if:
+ *      - A hint is provided
+ *      - The hint is not already present in the component name
+ *      - The forceHint flag is true
  * 3. Returns the formatted class name
  *
- * @param componentName The name of the component to format.
+ * @param componentName The base component name to format.
  * @param hint An optional hint to append to the component name.
- * @returns A formatted class name string.
+ * @param forceHint If true, forces the hint to be appended even if it matches the component name.
+ * @returns The formatted class name string.
  */
-export function formatClassName(componentName: string, hint?: string | null): string {
+export function formatClassName(
+  componentName: string,
+  hint?: string | null,
+  forceHint?: boolean
+): string {
   const base = toCamelCase(componentName)
-
-  if (!hint) return base
-
-  const normalizedHint = toPascalCase(hint)
-
-  // 🚫 Avoid repeating if componentName already includes the hint
-  if (base.toLowerCase().includes(hint.toLowerCase()) || base.includes(normalizedHint)) {
+  if (!hint || (!forceHint && base.endsWith(toPascalCase(hint)))) {
     return base
   }
 
+  const normalizedHint = toPascalCase(hint)
   return `${base}${normalizedHint}`
 }
 

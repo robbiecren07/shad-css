@@ -1,27 +1,29 @@
 import { FORBIDDEN_APPLY_UTILITIES } from '@/lib/constants'
 
 /**
- * Generates a normalized hint string from a tag name.
+ * Normalizes a component tag name to a semantic hint string.
  *
  * This function:
- * 1. Takes the last segment of a dotted tag name (e.g., "Foo.Bar" → "Bar")
- * 2. Removes "Icon" suffix if present
- * 3. Removes non-alphanumeric characters
- * 4. Converts first character to lowercase
- * 5. Returns 'root' if input is null
+ * 1. Handles component references:
+ *    - For nested components (e.g., "CommandPrimitive.Input"), extracts the final segment ("Input")
+ *    - For primitive tags (e.g., "div"), converts to PascalCase ("Div")
+ * 2. Removes the "Icon" suffix if present
+ * 3. Returns the normalized hint string
  *
- * @param tagName The tag name to normalize, can be null.
- * @returns A normalized hint string.
+ * @param tag The component tag name to normalize.
+ * @returns A normalized hint string suitable for class name generation.
  */
-export function normalizeHint(tagName: string | null): string {
-  if (!tagName) return 'root'
-
-  const raw = tagName.split('.').pop() ?? 'root'
-
-  return raw
-    .replace(/Icon$/, '') // Remove Icon suffix
-    .replace(/[^a-zA-Z0-9]/g, '')
-    .replace(/^[A-Z]/, (m) => m.toLowerCase())
+export function normalizeHint(tag: string): string {
+  let out: string
+  if (tag.includes('.')) {
+    // Extract final segment for nested components
+    out = tag.split('.').pop()!
+  } else {
+    // Convert primitive tags to PascalCase
+    out = tag.charAt(0).toUpperCase() + tag.slice(1)
+  }
+  // Remove trailing 'Icon' suffix
+  return out.replace(/Icon$/, '')
 }
 
 /**

@@ -1,0 +1,198 @@
+.contextMenuSubTrigger {
+  display: flex;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: calc(var(--radius) - 4px);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.contextMenuSubTrigger:focus {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.contextMenuSubTrigger[data-state="open"] {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.contextMenuSubTriggerInset {
+  padding-left: 2rem;
+}
+.contextMenuSubTriggerChevronRight {
+  margin-left: auto;
+  height: 1rem;
+  width: 1rem;
+}
+.contextMenuSubContent {
+  z-index: 50;
+  min-width: 8rem;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+  border-width: 1px;
+  background-color: hsl(var(--popover));
+  padding: 0.25rem;
+  color: hsl(var(--popover-foreground));
+  box-shadow:
+    0 0 #0000,
+    0 0 #0000,
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+.contextMenuSubContent[data-state="open"] {
+  animation-name: enter;
+  animation-duration: 150ms;
+}
+.contextMenuSubContent[data-state="closed"] {
+  animation-name: exit;
+  animation-duration: 150ms;
+}
+.contextMenuSubContent[data-state="open"] {
+}
+.contextMenuSubContent[data-state="closed"] {
+}
+.contextMenuSubContent[data-state="open"] {
+}
+.contextMenuSubContent[data-side="bottom"] {
+}
+.contextMenuSubContent[data-side="left"] {
+}
+.contextMenuSubContent[data-side="right"] {
+}
+.contextMenuSubContent[data-side="top"] {
+}
+.contextMenuContent {
+  z-index: 50;
+  min-width: 8rem;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+  border-width: 1px;
+  background-color: hsl(var(--popover));
+  padding: 0.25rem;
+  color: hsl(var(--popover-foreground));
+  box-shadow:
+    0 0 #0000,
+    0 0 #0000,
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  animation-name: enter;
+  animation-duration: 150ms;
+}
+.contextMenuContent[data-state="open"] {
+  animation-name: enter;
+  animation-duration: 150ms;
+}
+.contextMenuContent[data-state="closed"] {
+  animation-name: exit;
+  animation-duration: 150ms;
+}
+.contextMenuContent[data-state="open"] {
+}
+.contextMenuContent[data-state="closed"] {
+}
+.contextMenuContent[data-state="open"] {
+}
+.contextMenuContent[data-side="bottom"] {
+}
+.contextMenuContent[data-side="left"] {
+}
+.contextMenuContent[data-side="right"] {
+}
+.contextMenuContent[data-side="top"] {
+}
+.contextMenuItem {
+  position: relative;
+  display: flex;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: calc(var(--radius) - 4px);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.contextMenuItem:focus {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.contextMenuItem[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.contextMenuCheckboxItem {
+  position: relative;
+  display: flex;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: calc(var(--radius) - 4px);
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  padding-left: 2rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.contextMenuCheckboxItem:focus {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.contextMenuCheckboxItem[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.contextMenuCheckboxItemSpan {
+  position: absolute;
+  left: 0.5rem;
+  display: flex;
+  height: 0.875rem;
+  width: 0.875rem;
+  align-items: center;
+  justify-content: center;
+}
+.contextMenuCheckboxItemCheck {
+  height: 1rem;
+  width: 1rem;
+}
+.contextMenuRadioItemCircle {
+  height: 0.5rem;
+  width: 0.5rem;
+  fill: currentColor;
+}
+.contextMenuLabel {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+.contextMenuSeparator {
+  margin-left: -0.25rem;
+  margin-right: -0.25rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  height: 1px;
+  background-color: hsl(var(--border));
+}
+.contextMenuShortcut {
+  margin-left: auto;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.1em;
+  color: hsl(var(--muted-foreground));
+}

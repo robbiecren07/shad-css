@@ -20,8 +20,8 @@
   text-decoration-line: underline;
 }
 .accordionTriggerTrigger[data-state="open"] > svg {
-  transform: translate(0, 0) rotate(180deg) skewX(0) skewY(0) scaleX(0)
-    scaleY(0);
+  transform: translate(0, 0) rotate(180deg) skewX(0) skewY(0) scaleX(1)
+    scaleY(1);
 }
 .accordionTriggerChevronDown {
   height: 1rem;
@@ -30,6 +30,7 @@
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 200ms;
+  animation-duration: 200ms;
 }
 .accordionContent {
   overflow: hidden;
