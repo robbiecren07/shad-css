@@ -1,0 +1,67 @@
+.accordionItem {
+  border-bottom-width: 1px;
+}
+.accordionTrigger {
+  display: flex;
+}
+.accordionTriggerTrigger {
+  display: flex;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.accordionTriggerTrigger:hover {
+  text-decoration-line: underline;
+}
+.accordionTriggerTrigger[data-state="open"] > svg {
+  transform: translate(0, 0) rotate(180deg) skewX(0) skewY(0) scaleX(0)
+    scaleY(0);
+}
+.accordionTriggerChevronDown {
+  height: 1rem;
+  width: 1rem;
+  flex-shrink: 0;
+  color: hsl(var(--muted-foreground));
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+.accordionContent {
+  overflow: hidden;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+.accordionContent[data-state="closed"] {
+  animation: accordion-up 0.2s ease-out;
+}
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+.accordionContent[data-state="open"] {
+  animation: accordion-down 0.2s ease-out;
+}
+.accordionContentDiv {
+  padding-bottom: 1rem;
+  padding-top: 0px;
+}

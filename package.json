@@ -1,0 +1,51 @@
+{
+  "name": "shad-css",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "build:cli": "turbo --filter=cli build",
+    "dev": "turbo run dev",
+    "cli:dev": "turbo run dev --workspace=packages/cli",
+    "cli:build": "npm run build --workspace=packages/cli",
+    "converter:dev": "npm run convert --workspace=packages/converter",
+    "converter:fetch": "npm run fetch --workspace=packages/converter",
+    "converter:build": "npm run build --workspace=packages/converter",
+    "sync:components": "npm run sync:components --workspace=packages/converter",
+    "sync:themes": "npm run sync:themes --workspace=packages/converter",
+    "web:dev": "turbo run dev --workspace=apps/web",
+    "web:build": "turbo run build --workspace=apps/web",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "packageManager": "npm@11.3.0",
+  "dependencies": {
+    "@babel/core": "^7.27.3",
+    "@eslint/eslintrc": "^3.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "15.3.2",
+    "eslint-config-prettier": "^10.1.5",
+    "postcss": "^8.5.3",
+    "prettier": "^3.5.3",
+    "prettier-plugin-eslint": "^1.0.2",
+    "tsx": "^4.19.4"
+  },
+  "devDependencies": {
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^22.15.23",
+    "@types/prettier": "^2.7.3",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
+    "turbo": "^2.5.3",
+    "typescript": "5.8.2"
+  }
+}

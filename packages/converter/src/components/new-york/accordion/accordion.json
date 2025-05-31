@@ -1,0 +1,19 @@
+{
+  "name": "accordion",
+  "dependencies": [
+    "@radix-ui/react-accordion"
+  ],
+  "files": [
+    {
+      "type": "tsx",
+      "name": "index.tsx",
+      "content": "'use client';\n\nimport * as React from 'react';\nimport * as AccordionPrimitive from '@radix-ui/react-accordion';\nimport { ChevronDownIcon } from '@radix-ui/react-icons';\nimport { cn } from '@/lib/utils';\nimport styles from './accordion.module.css';\n\nconst Accordion = AccordionPrimitive.Root;\n\nconst AccordionItem = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitive.Item>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>\n>(({ className, ...props }, ref) => (\n  <AccordionPrimitive.Item\n    ref={ref}\n    className={cn(styles.accordionItem, className)}\n    {...props}\n  />\n));\nAccordionItem.displayName = 'AccordionItem';\n\nconst AccordionTrigger = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitive.Trigger>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>\n>(({ className, children, ...props }, ref) => (\n  <AccordionPrimitive.Header className={styles.accordionTrigger}>\n    <AccordionPrimitive.Trigger\n      ref={ref}\n      className={cn(styles.accordionTriggerTrigger, className)}\n      {...props}\n    >\n      {children}\n      <ChevronDownIcon className={styles.accordionTriggerChevronDown} />\n    </AccordionPrimitive.Trigger>\n  </AccordionPrimitive.Header>\n));\nAccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;\n\nconst AccordionContent = React.forwardRef<\n  React.ElementRef<typeof AccordionPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>\n>(({ className, children, ...props }, ref) => (\n  <AccordionPrimitive.Content\n    ref={ref}\n    className={styles.accordionContent}\n    {...props}\n  >\n    <div className={cn(styles.accordionContentDiv, className)}>{children}</div>\n  </AccordionPrimitive.Content>\n));\nAccordionContent.displayName = AccordionPrimitive.Content.displayName;\n\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent };\n"
+    },
+    {
+      "type": "css",
+      "name": "accordion.module.css",
+      "content": ".accordionItem {\n  border-bottom-width: 1px;\n}\n.accordionTrigger {\n  display: flex;\n}\n.accordionTriggerTrigger {\n  display: flex;\n  flex: 1 1 0%;\n  align-items: center;\n  justify-content: space-between;\n  padding-top: 1rem;\n  padding-bottom: 1rem;\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  font-weight: 500;\n  transition-property: all;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n.accordionTriggerTrigger:hover {\n  text-decoration-line: underline;\n}\n.accordionTriggerTrigger[data-state=\"open\"] > svg {\n  transform: translate(0, 0) rotate(180deg) skewX(0) skewY(0) scaleX(0)\n    scaleY(0);\n}\n.accordionTriggerChevronDown {\n  height: 1rem;\n  width: 1rem;\n  flex-shrink: 0;\n  color: hsl(var(--muted-foreground));\n  transition-property: transform;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 200ms;\n}\n.accordionContent {\n  overflow: hidden;\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n}\n@keyframes accordion-up {\n  from {\n    height: var(--radix-accordion-content-height);\n  }\n  to {\n    height: 0;\n  }\n}\n.accordionContent[data-state=\"closed\"] {\n  animation: accordion-up 0.2s ease-out;\n}\n@keyframes accordion-down {\n  from {\n    height: 0;\n  }\n  to {\n    height: var(--radix-accordion-content-height);\n  }\n}\n.accordionContent[data-state=\"open\"] {\n  animation: accordion-down 0.2s ease-out;\n}\n.accordionContentDiv {\n  padding-bottom: 1rem;\n  padding-top: 0px;\n}\n"
+    }
+  ],
+  "type": "components:ui"
+}
