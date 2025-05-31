@@ -7,10 +7,14 @@ import { transformClassExpression } from './transforms/transformClassExpression'
 import { removeForbiddenApplyUtils } from './helpers'
 
 /**
- * Converts a React component written in TSX to a format that uses CSS modules
- * instead of inline Tailwind CSS classes. This function processes the TSX content,
- * extracts class names, generates corresponding CSS module styles, and replaces
- * class names in the TSX with references to the generated CSS module.
+ * Converts a React component from inline Tailwind classes to CSS Modules format.
+ *
+ * This function performs a multi-step transformation:
+ * 1. Creates a TypeScript source file from the TSX content
+ * 2. Extracts all class name expressions from the component
+ * 3. Generates CSS module styles for each class name
+ * 4. Transforms the AST to replace class names with CSS module references
+ * 5. Injects the CSS module import into the transformed TSX
  *
  * @param componentName The name of the component, used for generating CSS class names and file names.
  * @param tsxContent The content of the TSX file as a string, which contains JSX elements and class names.
@@ -30,10 +34,13 @@ export async function convertComponent(
     ts.ScriptKind.TSX
   )
 
-  // Step 1: Extract class names
+  // Step 1: Extract class names from the component
+  // This creates a map of display names to their class name usages
   const classMap = findClassNameExpressions(sourceFile)
 
-  // Step 2: Build class replacement map + CSS
+  // Step 2: Generate CSS module styles and replacement map
+  // - cssSnippets: Array of CSS rules for each class
+  // - classReplacementMap: Map of original class names to CSS module references
   const cssSnippets: string[] = []
   const classReplacementMap: Record<string, string> = {}
 
@@ -52,11 +59,15 @@ export async function convertComponent(
     }
   }
 
-  // Step 3: Clean Tailwind CSS variables
+  // Step 3: Clean and compile CSS
+  // - Join CSS snippets into a single string
+  // - Process Tailwind variables and utilities
   const rawCss = cssSnippets.join('\n\n')
   const compiledCss = await tailwindToCss(rawCss)
 
-  // Step 4: Transform TypeScript AST for className replacements
+  // Step 4: Create AST transformer for className replacements
+  // - Set up TypeScript printer for generating transformed code
+  // - Define transformer to replace class names with CSS module references
   const printer = ts.createPrinter()
 
   const transformer = <T extends ts.Node>(context: ts.TransformationContext) => {
@@ -98,11 +109,15 @@ export async function convertComponent(
     return (node: T) => ts.visitNode(node, visit)
   }
 
-  // Apply the transformation to the source file
+  // Apply AST transformation
+  // - Transform the source file to replace class names with CSS module references
+  // - Generate the transformed TSX code using the printer
   const result = ts.transform(sourceFile, [transformer])
   const transformedTsx = printer.printFile(result.transformed[0] as ts.SourceFile)
 
-  // Add the transformed css import to the bottom of the import list in the TSX file
+  // Step 5: Inject CSS module import
+  // - Add import statement for the generated CSS module
+  // - Place import at the bottom of the existing import list
   const finalTsx = injectStylesImport(
     transformedTsx,
     `./${componentName}.module.css`,

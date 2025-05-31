@@ -5,14 +5,21 @@ import { cleanTailwindVars } from './cleanTailwindVars'
 import { normalizePostCssOutput } from './helpers'
 
 /**
- * This function processes the input CSS using Tailwind CSS and PostCSS to generate
- * a valid CSS output. It applies Tailwind's utility classes, handles nested rules,
- * and cleans up any Tailwind-specific variables.
+ * Processes Tailwind CSS classes into valid CSS using PostCSS.
  *
- * @param cssInput - A string containing the CSS input that may include Tailwind CSS classes.
+ * This function:
+ * 1. Applies Tailwind's utility classes using the configured config file
+ * 2. Processes nested CSS rules using postcss-nested
+ * 3. Cleans up Tailwind-specific variables and formatting
+ * 4. Normalizes the output before returning
+ *
+ * @param cssInput A string containing the CSS input that may include Tailwind CSS classes.
  * @returns A Promise that resolves to a string containing the processed CSS output.
  */
 export async function tailwindToCss(cssInput: string): Promise<string> {
+  // Process CSS through PostCSS pipeline
+  // 1. Apply Tailwind CSS with disabled preflight
+  // 2. Handle nested CSS rules
   const result = await postcss([
     tailwindcss({
       config: './tailwind.config.js',
@@ -23,10 +30,14 @@ export async function tailwindToCss(cssInput: string): Promise<string> {
     postcssNested,
   ]).process(cssInput, { from: undefined })
 
-  // Clean up Tailwind's --tw-* vars and var(...) usage
+  // Clean up Tailwind-specific variables
+  // - Removes --tw-* custom properties
+  // - Replaces var(...) references with actual values
   const cleanedCss = await cleanTailwindVars(result.css)
 
-  // Normalize formatting before Prettier
+  // Normalize CSS formatting
+  // - Standardizes whitespace and line breaks
+  // - Prepares for consistent Prettier processing
   const compactCss = normalizePostCssOutput(cleanedCss)
 
   return compactCss

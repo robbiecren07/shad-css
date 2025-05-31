@@ -1,11 +1,16 @@
 import { FORBIDDEN_APPLY_UTILITIES } from '@/lib/constants'
 
 /**
- * Normalizes a tag name to a hint string.
- * This function processes the tag name by removing the "Icon" suffix, stripping non-alphanumeric characters,
- * and converting the first character to lowercase. If the tag name is null, it returns 'root'.
+ * Generates a normalized hint string from a tag name.
  *
- * @param tagName - The tag name to normalize, can be null.
+ * This function:
+ * 1. Takes the last segment of a dotted tag name (e.g., "Foo.Bar" → "Bar")
+ * 2. Removes "Icon" suffix if present
+ * 3. Removes non-alphanumeric characters
+ * 4. Converts first character to lowercase
+ * 5. Returns 'root' if input is null
+ *
+ * @param tagName The tag name to normalize, can be null.
  * @returns A normalized hint string.
  */
 export function normalizeHint(tagName: string | null): string {
@@ -20,9 +25,15 @@ export function normalizeHint(tagName: string | null): string {
 }
 
 /**
- * Converts a string to camelCase.
+ * Converts a string to camelCase format.
  *
- * @param str - The string to convert to camelCase.
+ * This function:
+ * 1. Splits the string by non-alphanumeric characters
+ * 2. Converts each segment to uppercase except the first one
+ * 3. Joins segments back together
+ * 4. Converts the first character to lowercase
+ *
+ * @param str The string to convert to camelCase.
  * @returns A camelCase version of the input string.
  */
 export function toCamelCase(str: string): string {
@@ -32,10 +43,14 @@ export function toCamelCase(str: string): string {
 }
 
 /**
- * Converts a string to PascalCase.
- * This function first converts the string to camelCase and then capitalizes the first character.
+ * Converts a string to PascalCase format.
  *
- * @param str - The string to convert to PascalCase.
+ * This function:
+ * 1. Converts the string to camelCase
+ * 2. Capitalizes the first character
+ * 3. Returns the resulting PascalCase string
+ *
+ * @param str The string to convert to PascalCase.
  * @returns A PascalCase version of the input string.
  */
 export function toPascalCase(str: string): string {
@@ -45,10 +60,14 @@ export function toPascalCase(str: string): string {
 }
 
 /**
- * Normalizes PostCSS output by collapsing multiple newlines into a single newline.
- * This is useful for cleaning up the output of PostCSS processing.
+ * Cleans up PostCSS output by normalizing newlines.
  *
- * @param css - The CSS string to normalize.
+ * This function:
+ * 1. Takes a CSS string with potentially multiple newlines
+ * 2. Collapses consecutive newlines into a single newline
+ * 3. Returns the cleaned CSS string
+ *
+ * @param css The CSS string to normalize.
  * @returns A normalized CSS string with collapsed newlines.
  */
 export function normalizePostCssOutput(css: string): string {
@@ -57,11 +76,15 @@ export function normalizePostCssOutput(css: string): string {
 }
 
 /**
- * Removes forbidden `@apply` utilities from a class list.
- * This function filters out any classes that are considered forbidden for `@apply` usage,
- * logging a warning for each removed class.
+ * Filters out forbidden Tailwind `@apply` utilities from a class list.
  *
- * @param classList - A string containing class names separated by spaces.
+ * This function:
+ * 1. Splits the input class list into individual classes
+ * 2. Filters out any classes that are in the forbidden list
+ * 3. Logs a warning for each removed forbidden class
+ * 4. Returns the cleaned class list
+ *
+ * @param classList A string containing class names separated by spaces.
  * @returns A string with the forbidden classes removed.
  */
 export function removeForbiddenApplyUtils(classList: string): string {

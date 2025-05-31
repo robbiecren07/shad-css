@@ -4,11 +4,17 @@ import { toCamelCase, toPascalCase } from './helpers'
 import { basicHtmlTags } from '@/lib/constants'
 
 /**
- * Format code using Prettier
- * This function formats the provided code string using Prettier with the specified parser.
+ * Formats code using Prettier with consistent configuration.
  *
- * @param code - The code string to format
- * @param parser - The parser to use for formatting
+ * This function:
+ * 1. Uses Prettier to format code with:
+ *    - Single quotes
+ *    - Trailing commas for all multi-line structures
+ *    - Appropriate parser based on code type
+ * 2. Returns the formatted code string
+ *
+ * @param code The code string to format
+ * @param parser The parser to use for formatting ('babel' or 'css')
  * @returns The formatted code string
  */
 export async function formatCode(code: string, parser: 'babel' | 'css' = 'babel') {
@@ -20,13 +26,17 @@ export async function formatCode(code: string, parser: 'babel' | 'css' = 'babel'
 }
 
 /**
- * Formats a component name and an optional hint into a class name.
- * If the hint is provided and not already included in the component name,
- * it appends the hint in PascalCase to the component name.
- * If the hint is null or empty, it returns the component name in camelCase.
+ * Generates a CSS class name from a component name and optional hint.
  *
- * @param componentName - The name of the component to format.
- * @param hint - An optional hint to append to the component name.
+ * This function:
+ * 1. Converts component name to camelCase
+ * 2. If hint is provided:
+ *    - Converts hint to PascalCase
+ *    - Appends hint if not already present in component name
+ * 3. Returns the formatted class name
+ *
+ * @param componentName The name of the component to format.
+ * @param hint An optional hint to append to the component name.
  * @returns A formatted class name string.
  */
 export function formatClassName(componentName: string, hint?: string | null): string {
@@ -45,10 +55,19 @@ export function formatClassName(componentName: string, hint?: string | null): st
 }
 
 /**
- * Formats a component name and an optional hint into a key.
+ * Generates a unique key for component context.
  *
- * @param componentName - The name of the component to format.
- * @param hint - An optional hint to append to the component name.
+ * This function:
+ * 1. Converts component name to camelCase
+ * 2. If hint is provided:
+ *    - Converts hint to PascalCase
+ *    - Appends hint if it's not:
+ *      - The same as the component name
+ *      - A basic HTML tag
+ * 3. Returns the formatted key
+ *
+ * @param componentName The name of the component to format.
+ * @param hint An optional hint to append to the component name.
  * @returns A formatted key string.
  */
 export function formatKey(componentName: string, hint: string | null): string {
@@ -63,10 +82,20 @@ export function formatKey(componentName: string, hint: string | null): string {
 }
 
 /**
- * Formats and lints TypeScript/TSX code using Prettier and ESLint.
+ * Formats and lints TypeScript/TSX code with consistent style rules.
  *
- * @param tsPath - The path to the TypeScript file (used for ESLint).
- * @param tsxCode - The TSX code to format and lint.
+ * This function:
+ * 1. Formats code with Prettier:
+ *    - Uses TypeScript parser
+ *    - Enforces semicolons
+ * 2. Lints with ESLint:
+ *    - Enforces semicolons
+ *    - Adds padding between statements
+ *    - Adds blank lines before exports and const declarations
+ * 3. Returns the formatted and linted code
+ *
+ * @param tsPath The path to the TypeScript file (used for ESLint).
+ * @param tsxCode The TSX code to format and lint.
  * @returns A Promise that resolves to the formatted and linted code.
  */
 export async function formatAndLint(tsPath: string, tsxCode: string): Promise<string> {

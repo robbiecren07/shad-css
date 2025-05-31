@@ -1,43 +1,49 @@
 import ts from 'typescript'
 
 /**
- * Transforms a TypeScript expression that may contain class names,
- * such as string literals, call expressions, arrays, or conditionals,
- * replacing them with identifiers based on a provided mapping.
+ * Transforms class name expressions into CSS module references.
  *
- * @param expr A TypeScript expression that may contain class names,
- * string literals, call expressions, arrays, or conditionals.
- * @param map A mapping object where keys are original class names (as strings)
- * and values are the identifiers to replace them with.
- * @returns A transformed TypeScript expression with class names replaced by identifiers.
+ * This function handles various expression types that may contain class names:
+ * 1. Call expressions (e.g., cn(...))
+ * 2. Array literals (e.g., ["class1", "class2"])
+ * 3. Binary expressions (e.g., string concatenation)
+ * 4. Conditional expressions (e.g., ternary operators)
+ * 5. Simple string literals
+ *
+ * @param expr A TypeScript expression that may contain class names.
+ * @param map A mapping object where keys are original class names and values are CSS module references.
+ * @returns A transformed TypeScript expression with class names replaced by CSS module references.
  */
 export function transformClassExpression(
   expr: ts.Expression,
   map: Record<string, string>
 ): ts.Expression {
-  // Replace string literals inside cn(...) or arrays or conditionals
+  // Handle class name utility calls (e.g., cn(...))
   if (ts.isCallExpression(expr)) {
+    // Process each argument:
+    // - Replace string literals with CSS module references
+    // - Recursively transform nested expressions
     const args = expr.arguments.map((arg) => {
       if (ts.isStringLiteral(arg) && map[arg.text]) {
-        // If the argument is a string literal and exists in the map, replace it with the identifier
         return ts.factory.createIdentifier(map[arg.text])
       }
-      // If the argument is an expression, recursively transform it
       return ts.isExpression(arg) ? transformClassExpression(arg, map) : arg
     })
     return ts.factory.updateCallExpression(expr, expr.expression, expr.typeArguments, args)
   }
 
-  // Handle arrays and conditionals
+  // Handle array literals
   if (ts.isArrayLiteralExpression(expr)) {
+    // Replace string literals with CSS module references
     const elements = expr.elements.map((el) =>
       ts.isStringLiteral(el) && map[el.text] ? ts.factory.createIdentifier(map[el.text]) : el
     )
     return ts.factory.updateArrayLiteralExpression(expr, elements)
   }
 
-  // Handle binary expressions (e.g., concatenation)
+  // Handle string concatenation
   if (ts.isBinaryExpression(expr)) {
+    // Recursively transform both sides of the expression
     return ts.factory.updateBinaryExpression(
       expr,
       transformClassExpression(expr.left, map),
@@ -46,8 +52,9 @@ export function transformClassExpression(
     )
   }
 
-  // Handle conditional expressions (ternary operator)
+  // Handle ternary operators
   if (ts.isConditionalExpression(expr)) {
+    // Recursively transform both branches
     return ts.factory.updateConditionalExpression(
       expr,
       expr.condition,
@@ -58,7 +65,7 @@ export function transformClassExpression(
     )
   }
 
-  // If it's a string literal and exists in the map, replace it with the identifier
+  // Handle simple string literals
   if (ts.isStringLiteral(expr) && map[expr.text]) {
     return ts.factory.createIdentifier(map[expr.text])
   }

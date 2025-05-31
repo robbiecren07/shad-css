@@ -1,10 +1,16 @@
 /**
- * Creates a JSON file with the specified component name, dependencies, TSX content, and CSS content.
+ * Creates a structured JSON representation of a component.
  *
- * @param componentName - A string representing the name of the component.
- * @param dependencies - An array of strings representing the dependencies of the component.
- * @param tsxContent - A string containing the TSX content of the component.
- * @param cssContent - A string containing the CSS content of the component.
+ * This function generates a JSON object with the following structure:
+ * - name: Component name
+ * - dependencies: Array of component dependencies
+ * - files: Array containing both TSX and CSS module files
+ * - type: Component type identifier
+ *
+ * @param componentName The name of the component.
+ * @param dependencies Array of component dependencies (optional).
+ * @param tsxContent The TSX content of the component.
+ * @param cssContent The CSS module content of the component.
  * @returns A promise that resolves to an object containing the JSON string.
  */
 export async function createJsonFile(
@@ -13,10 +19,14 @@ export async function createJsonFile(
   tsxContent: string,
   cssContent: string
 ): Promise<{ json: string }> {
-  // Create the JSON structure
+  // Build the component JSON structure
   const jsonData = {
+    // Component metadata
     name: componentName,
-    dependencies: dependencies ? dependencies : [],
+    dependencies: dependencies || [],
+    type: 'components:ui',
+    
+    // Component files
     files: [
       {
         type: 'tsx',
@@ -29,10 +39,9 @@ export async function createJsonFile(
         content: cssContent,
       },
     ],
-    type: 'components:ui',
   }
 
-  // Convert JSON to string
+  // Format JSON with 2-space indentation
   const jsonString = JSON.stringify(jsonData, null, 2)
 
   return {
