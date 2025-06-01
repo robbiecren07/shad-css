@@ -26,7 +26,7 @@ export const basicHtmlTags = new Set([
   'aside',
 ])
 
-// These are class names that should not be used in the tailwind to css converter
+// These are class names that should not be used in the tailwindToCss converter
 export const FORBIDDEN_CLASS_NAMES = [
   'peer',
   'group',
@@ -41,6 +41,7 @@ export const FORBIDDEN_CLASS_NAMES = [
   // add any other cva/prop names or keys you discover, or automate by regex if needed
 ]
 
+// These are Tailwind CSS default variables that are used in cleanTailwindVars.ts
 export const TAILWIND_DEFAULT_VARS: Record<string, string> = {
   '--tw-border-spacing-x': '0',
   '--tw-border-spacing-y': '0',
@@ -96,9 +97,10 @@ export const TAILWIND_DEFAULT_VARS: Record<string, string> = {
 }
 
 // these are shadcn components that do not have a direct Tailwind CSS equivalent
-// and are not supported by the converter
-export const EXCLUDED_COMPONENTS = ['aspect-ratio', 'collapsible']
+export const EXCLUDE_STYLESHEET_INJECTION = ['aspect-ratio', 'collapsible']
 
+// these components need the button.module.css style sheet
 export const NEEDS_BUTTON_STYLES = ['alert-dialog']
 
+// these components need the toggle-group.module.css style sheet
 export const NEEDS_TOGGLE_STYLES = ['toggle-group']

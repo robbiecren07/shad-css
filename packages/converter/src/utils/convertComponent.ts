@@ -7,7 +7,7 @@ import { transformClassNames } from './transforms/transformClassNames'
 import { formatClassName } from './formatters'
 import { injectStylesImport } from './injectStylesImport'
 import { capitalize, removeForbiddenApplyUtils, toCamelCase } from './helpers'
-import { FORBIDDEN_CLASS_NAMES } from '@/lib/constants'
+import { EXCLUDE_STYLESHEET_INJECTION, FORBIDDEN_CLASS_NAMES } from '@/lib/constants'
 
 /**
  * Converts a React component from inline Tailwind classes to CSS Modules format.
@@ -131,12 +131,18 @@ export async function convertComponent(
   // Step 6: Inject CSS module import
   // - Add import statement for the generated CSS module
   // - Place import at the bottom of the existing import list
-  const finalTsx = injectStylesImport(
-    transformedTsx,
-    `./${componentName}.module.css`,
-    `${componentName}.tsx`,
-    componentName
-  )
+  let finalTsx = transformedTsx
+
+  // If the component is not in the EXCLUDE_STYLESHEET_INJECTION list,
+  // inject the CSS module import statement
+  if (!EXCLUDE_STYLESHEET_INJECTION.includes(componentName)) {
+    finalTsx = injectStylesImport(
+      transformedTsx,
+      `./${componentName}.module.css`,
+      `${componentName}.tsx`,
+      componentName
+    )
+  }
 
   return {
     tsx: finalTsx,
