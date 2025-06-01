@@ -1,2 +1,7 @@
 node_modules/
 dist/
+
+src/components/default/*/**.tsx
+src/components/default/*/**.css
+src/components/new-york/*/**.tsx
+src/components/new-york/*/**.css
