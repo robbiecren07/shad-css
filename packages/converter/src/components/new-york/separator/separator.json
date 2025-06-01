@@ -8,12 +8,12 @@
   "files": [
     {
       "type": "tsx",
-      "name": "index.tsx",
+      "name": "index",
       "content": "'use client';\n\nimport * as React from 'react';\nimport * as SeparatorPrimitive from '@radix-ui/react-separator';\nimport { cn } from '@/lib/utils';\nimport styles from './separator.module.css';\n\nconst Separator = React.forwardRef<\n  React.ElementRef<typeof SeparatorPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>\n>(\n  (\n    { className, orientation = 'horizontal', decorative = true, ...props },\n    ref,\n  ) => (\n    <SeparatorPrimitive.Root\n      ref={ref}\n      decorative={decorative}\n      orientation={orientation}\n      className={cn(\n        styles.separator,\n        orientation === 'horizontal' ? styles.separator : styles.separator,\n        className,\n      )}\n      {...props}\n    />\n  ),\n);\nSeparator.displayName = SeparatorPrimitive.Root.displayName;\n\nexport { Separator };\n"
     },
     {
       "type": "css",
-      "name": "separator.module.css",
+      "name": "separator.module",
       "content": ".separator {\n  flex-shrink: 0;\n  background-color: hsl(var(--border));\n  height: 1px;\n  width: 100%;\n  height: 100%;\n  width: 1px;\n}\n"
     }
   ]

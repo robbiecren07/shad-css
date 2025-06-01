@@ -34,12 +34,12 @@ export async function createJsonFile(
     files: [
       {
         type: 'tsx',
-        name: 'index.tsx',
+        name: 'index',
         content: tsxContent,
       },
       {
         type: 'css',
-        name: `${componentName}.module.css`,
+        name: `${componentName}.module`,
         content: cssContent,
       },
     ],

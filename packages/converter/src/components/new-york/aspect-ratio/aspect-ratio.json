@@ -8,12 +8,12 @@
   "files": [
     {
       "type": "tsx",
-      "name": "index.tsx",
+      "name": "index",
       "content": "'use client';\n\nimport * as AspectRatioPrimitive from '@radix-ui/react-aspect-ratio';\n\nconst AspectRatio = AspectRatioPrimitive.Root;\n\nexport { AspectRatio };\n"
     },
     {
       "type": "css",
-      "name": "aspect-ratio.module.css",
+      "name": "aspect-ratio.module",
       "content": ""
     }
   ]

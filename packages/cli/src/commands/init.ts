@@ -1,7 +1,13 @@
+import type { ShadCssConfig } from '@/types'
+import fs from 'node:fs'
+import path from 'node:path'
 import { Command } from 'commander'
-import * as fs from 'fs'
-import * as path from 'path'
 import prompts from 'prompts'
+import fg from 'fast-glob'
+import { getThemeCssVars, injectCssVarsSmart } from '@/utils/themeVars'
+import { detectPackageManager } from '@/utils/helpers'
+import { installDependency } from '@/utils/installDependency'
+import { createCnHelper } from '@/utils/createCnHelper'
 
 export const init = new Command()
   .name('init')
@@ -16,6 +22,11 @@ export const init = new Command()
 
     console.log('Initializing shad-css...')
 
+    await runInit()
+  })
+
+export async function runInit(): Promise<ShadCssConfig> {
+  try {
     // Check for tsconfig.json
     if (!fs.existsSync('tsconfig.json')) {
       console.error(
@@ -29,30 +40,64 @@ export const init = new Command()
     const srcDir = hasSrcDir ? 'src' : ''
 
     // Define default values
-    const DEFAULT_OUTPUT_DIR = `${srcDir ? 'src/' : ''}components/shad-css`
+    const DEFAULT_OUTPUT_DIR = `${srcDir ? 'src/' : ''}components/ui`
     const DEFAULT_COMPONENTS_ALIAS = '@/*'
 
-    // Ask questions
-    const options = await prompts([
-      {
+    // Recursively search for globals.css/scss, ignore build dirs
+    const globalStyles = fg.sync(['**/globals.css', '**/globals.scss'], {
+      ignore: ['**/node_modules/**', '**/dist/**', '**/.next/**', '**/out/**'],
+      deep: 4,
+    })
+
+    let globalStylesheet: string
+
+    if (globalStyles.length === 1) {
+      globalStylesheet = globalStyles[0]
+    } else if (globalStyles.length > 1) {
+      const { chosen } = await prompts({
+        type: 'select',
+        name: 'chosen',
+        message: 'Multiple globals.{css,scss} files found. Choose one:',
+        choices: globalStyles.map((file) => ({ title: file, value: file })),
+      })
+      globalStylesheet = chosen
+    } else {
+      // Preferred creation order
+      const candidateDirs = [path.join('src', 'app'), 'app', 'src', '.']
+      let globalDir = '.'
+      let globalPath = ''
+
+      for (const dir of candidateDirs) {
+        if (fs.existsSync(dir) && fs.lstatSync(dir).isDirectory()) {
+          globalDir = dir
+          break
+        }
+      }
+      globalPath = path.join(globalDir, 'globals.css')
+
+      const { createGlobal } = await prompts({
         type: 'toggle',
-        name: 'typescript',
-        message: 'Would you like to use TypeScript (recommended)?',
+        name: 'createGlobal',
+        message: `No globals.css or globals.scss found. Create one at "${globalPath}"?`,
         initial: true,
         active: 'yes',
         inactive: 'no',
-      },
-    ])
+      })
 
-    // Exit if TypeScript is not selected
-    if (!options.typescript) {
-      console.log('\nℹ️ shad-css currently only supports TypeScript projects.')
-      console.log('Please run this command in a TypeScript project.')
-      process.exit(0)
+      if (!createGlobal) {
+        console.error(
+          '\n❌ Error: A global stylesheet is required to set base colors. Please add a globals.css or globals.scss to your project and re-run this command.'
+        )
+        process.exit(1)
+      }
+
+      fs.writeFileSync(globalPath, '/* shad-css generated global stylesheet */\n')
+      globalStylesheet = globalPath
+      console.log(`Created ${globalPath}`)
     }
 
-    // Ask remaining questions
-    const remainingOptions = await prompts([
+    // Ask questions
+    const options = await prompts([
       {
         type: 'select',
         name: 'theme',
@@ -92,19 +137,50 @@ export const init = new Command()
 
     // Create configuration using remaining options
     const config = {
-      theme: remainingOptions.theme,
-      baseColor: remainingOptions.baseColor,
-      outputDir: remainingOptions.outputDir,
-      componentsAlias: remainingOptions.componentsAlias,
+      theme: options.theme,
+      baseColor: options.baseColor,
+      outputDir: options.outputDir,
+      componentsAlias: options.componentsAlias,
+      iconLibrary: options.theme === 'default' ? 'lucide-react' : 'react-icons',
+      globalStylesheet,
     }
 
     // Create output directory
-    const outputDir = path.join(process.cwd(), remainingOptions.outputDir)
+    const outputDir = path.join(process.cwd(), config.outputDir)
     fs.mkdirSync(outputDir, { recursive: true })
 
-    // Create configuration file
+    // Inject base colors into global stylesheet
+    const cssVars = getThemeCssVars(config.baseColor)
+    injectCssVarsSmart(config.globalStylesheet, cssVars)
+
+    // Create json configuration file
     fs.writeFileSync(path.join(process.cwd(), 'shad-css.json'), JSON.stringify(config, null, 2))
 
-    console.log('\nInitialization complete!')
-    console.log(`Your components will be installed in: ${remainingOptions.outputDir}`)
-  })
+    // Install the correct icon library
+    const packageManager = detectPackageManager()
+    let initDep = ['classnames']
+
+    if (config.iconLibrary === 'lucide-react') {
+      initDep.push('lucide-react')
+    } else if (config.iconLibrary === 'react-icons') {
+      initDep.push('@radix-ui/react-icons')
+    } else {
+      throw new Error('Unknown icon library.')
+    }
+
+    installDependency(initDep, packageManager)
+
+    // Create the cn helper at lib/utils.ts
+    const baseDir = srcDir || '.'
+    const cnHelperPath = path.join(process.cwd(), baseDir, 'lib', 'utils.ts')
+    createCnHelper(cnHelperPath)
+
+    console.log('\n✅ Initialization complete!')
+    console.log(`Your components will be installed in: ${config.outputDir}`)
+
+    return config
+  } catch (error) {
+    console.error('Error during initialization:', error)
+    process.exit(1)
+  }
+}

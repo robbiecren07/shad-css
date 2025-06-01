@@ -2,7 +2,8 @@ import { execSync } from 'child_process'
 
 /**
  * Detect the package manager used in the project
- * @returns 'npm', 'yarn', or 'pnpm'
+ * @returns 'npm', 'yarn', 'pnpm', or 'bun'
+ * @throws Error if no supported package manager is found
  */
 export function detectPackageManager(): string {
   try {
@@ -17,7 +18,12 @@ export function detectPackageManager(): string {
         execSync('pnpm --version', { stdio: 'ignore' })
         return 'pnpm'
       } catch {
-        throw new Error('No supported package manager found (npm, yarn, or pnpm)')
+        try {
+          execSync('bun --version', { stdio: 'ignore' })
+          return 'bun'
+        } catch {
+          throw new Error('No supported package manager found (npm, yarn, pnpm, or bun)')
+        }
       }
     }
   }

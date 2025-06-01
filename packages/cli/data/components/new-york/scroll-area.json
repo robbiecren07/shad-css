@@ -8,12 +8,12 @@
   "files": [
     {
       "type": "tsx",
-      "name": "index.tsx",
+      "name": "index",
       "content": "'use client';\n\nimport * as React from 'react';\nimport * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';\nimport { cn } from '@/lib/utils';\nimport styles from './scroll-area.module.css';\n\nconst ScrollArea = React.forwardRef<\n  React.ElementRef<typeof ScrollAreaPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>\n>(({ className, children, ...props }, ref) => (\n  <ScrollAreaPrimitive.Root\n    ref={ref}\n    className={cn(styles.scrollArea, className)}\n    {...props}\n  >\n    <ScrollAreaPrimitive.Viewport className={styles.scrollAreaViewport}>\n      {children}\n    </ScrollAreaPrimitive.Viewport>\n    <ScrollBar />\n    <ScrollAreaPrimitive.Corner />\n  </ScrollAreaPrimitive.Root>\n));\nScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;\n\nconst ScrollBar = React.forwardRef<\n  React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,\n  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>\n>(({ className, orientation = 'vertical', ...props }, ref) => (\n  <ScrollAreaPrimitive.ScrollAreaScrollbar\n    ref={ref}\n    orientation={orientation}\n    className={cn(\n      styles.scrollBar,\n      orientation === 'vertical' && styles.scrollBar,\n      orientation === 'horizontal' && styles.scrollBar,\n      className,\n    )}\n    {...props}\n  >\n    <ScrollAreaPrimitive.ScrollAreaThumb\n      className={styles.scrollBarScrollAreaThumb}\n    />\n  </ScrollAreaPrimitive.ScrollAreaScrollbar>\n));\nScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;\n\nexport { ScrollArea, ScrollBar };\n"
     },
     {
       "type": "css",
-      "name": "scroll-area.module.css",
+      "name": "scroll-area.module",
       "content": ".scrollArea {\n  position: relative;\n  overflow: hidden;\n}\n.scrollAreaViewport {\n  height: 100%;\n  width: 100%;\n  border-radius: inherit;\n}\n.scrollBar {\n  display: flex;\n  touch-action: none;\n  user-select: none;\n  transition-property:\n    color, background-color, border-color, text-decoration-color, fill, stroke;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n  height: 100%;\n  width: 0.625rem;\n  border-left-width: 1px;\n  border-left-color: transparent;\n  height: 0.625rem;\n  flex-direction: column;\n  border-top-width: 1px;\n  border-top-color: transparent;\n  padding: 1px;\n}\n.scrollBarScrollAreaThumb {\n  position: relative;\n  flex: 1 1 0%;\n  border-radius: 9999px;\n  background-color: hsl(var(--border));\n}\n"
     }
   ]

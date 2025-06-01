@@ -17,11 +17,13 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "tsup && node scripts/copyData.js"
   },
   "dependencies": {
     "commander": "^14.0.0",
+    "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.0",
+    "prettier": "^3.5.3",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
@@ -33,7 +35,7 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.5",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.4",
+    "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   },
   "bin": {

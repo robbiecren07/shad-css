@@ -17,6 +17,10 @@ it will most liekly be `import { Label } from '@/components/ui/label';`. Since w
 this should not be an issue placing it in the same `ui` folder as shadcn (if the user currently has shadcn components in their project).
 
 
+- Need to add logic to handle tailwind classes that are meant for radix-ui vars like:
+`origin-[--radix-hover-card-content-transform-origin]` in the `hover-card.tsx` component.
+
+
 ### Components to address
 
 - alert-dialog        # ⚠️ possibly resolved with update in `transformClassExpression()`

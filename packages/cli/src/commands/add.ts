@@ -1,51 +1,106 @@
-import type { ComponentData } from '@/types'
+import type { ComponentData, ShadCssConfig } from '@/types'
+import fs from 'node:fs'
+import { fileURLToPath } from 'url'
+import path from 'path'
 import { Command } from 'commander'
-import * as fs from 'fs'
-import * as path from 'path'
-import { execSync } from 'child_process'
+import prompts from 'prompts'
 import { readFileSync } from 'fs'
+import { runInit } from './init'
 import { detectPackageManager } from '@/utils/helpers'
+import { addComponents } from '@/utils/addComponents'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export const add = new Command()
   .name('add')
   .argument('<component>', 'Shadcn component name (e.g. button)')
-  .argument('<style>', 'Style name (e.g. default, new-york)')
-  .action(async (component, style) => {
+  .option('-o, --overwrite', 'overwrite existing files.', false)
+  .action(async (component, options) => {
     try {
       // Load configuration
-      const configPath = path.join(process.cwd(), '.shadcssrc')
-      const config = JSON.parse(readFileSync(configPath, 'utf-8'))
+      let config: ShadCssConfig
+      const configPath = path.join(process.cwd(), 'shad-css.json')
+
+      // Check if shad-css.json exists
+      if (!fs.existsSync(configPath)) {
+        const { shouldInit } = await prompts({
+          type: 'toggle',
+          name: 'shouldInit',
+          message: 'No shad-css.json found. Initialize now?',
+          initial: true,
+          active: 'yes',
+          inactive: 'no',
+        })
+
+        if (!shouldInit) {
+          console.log('shad-css add cancelled.')
+          process.exit(1)
+        }
+
+        // Run initialization if config doesn't exist
+        config = await runInit()
+      } else {
+        // Read existing configuration
+        config = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+      }
 
       // Load component metadata
-      const componentPath = path.join(__dirname, '.', 'components', style, `${component}.json`)
+      const componentPath = path.join(
+        __dirname,
+        '../data/components',
+        config.theme,
+        `${component}.json`
+      )
       if (!fs.existsSync(componentPath)) {
-        throw new Error(`Component '${component}' not found for style '${style}'`)
+        throw new Error(`Component '${component}' not found for theme '${config.theme}'`)
       }
 
       const componentData: ComponentData = JSON.parse(readFileSync(componentPath, 'utf-8'))
 
       // Create target directory
-      const targetDir = path.join(process.cwd(), config.outputDir, style, component)
+      const targetDir = path.join(process.cwd(), config.outputDir, component)
       fs.mkdirSync(targetDir, { recursive: true })
 
-      // Write files
-      fs.writeFileSync(path.join(targetDir, `${component}.tsx`), componentData.tsx)
-      fs.writeFileSync(path.join(targetDir, `${component}.module.css`), componentData.css)
+      // Check if component files already exist
+      const existingFiles = componentData.files.filter((file) => {
+        const filePath = path.join(targetDir, `${file.name}.${file.type}`)
+        return fs.existsSync(filePath)
+      })
 
-      // Install dependencies
-      const packageManager = detectPackageManager()
-      const dependencies = [...componentData.radixDependencies]
-      if (dependencies.length > 0) {
-        const installCmd = `${packageManager} install ${dependencies.join(' ')}`
-        execSync(installCmd, { stdio: 'inherit' })
+      let shouldOverwrite = options.overwrite
+
+      if (!shouldOverwrite && existingFiles.length > 0) {
+        const { overwriteConfirmed } = await prompts({
+          type: 'toggle',
+          name: 'overwriteConfirmed',
+          message: `Component '${component}' already exists. Overwrite?`,
+          initial: false,
+          active: 'yes',
+          inactive: 'no',
+        })
+        shouldOverwrite = overwriteConfirmed
       }
 
-      console.log(`\nSuccessfully added ${component} component!`)
-      console.log(`You can now use it like this: <${componentData.name} />`)
+      if (existingFiles.length > 0 && !shouldOverwrite) {
+        console.log('Add command cancelled. No files were overwritten.')
+        process.exit(0)
+      }
+
+      const packageManager = detectPackageManager()
+
+      await addComponents({
+        component,
+        config,
+        options: { overwrite: options.overwrite },
+        __dirname,
+        packageManager,
+      })
     } catch (error: unknown) {
       console.error(
         'Error adding component:',
         error instanceof Error ? error.message : 'Unknown error'
       )
+      process.exit(1)
     }
   })

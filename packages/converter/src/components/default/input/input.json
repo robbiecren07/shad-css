@@ -6,12 +6,12 @@
   "files": [
     {
       "type": "tsx",
-      "name": "index.tsx",
+      "name": "index",
       "content": "import * as React from 'react';\nimport { cn } from '@/lib/utils';\nimport styles from './input.module.css';\n\nexport interface InputProps\n  extends React.InputHTMLAttributes<HTMLInputElement> {}\n\nconst Input = React.forwardRef<HTMLInputElement, InputProps>(\n  ({ className, type, ...props }, ref) => {\n    return (\n      <input\n        type={type}\n        className={cn(styles.input, className)}\n        ref={ref}\n        {...props}\n      />\n    );\n  },\n);\nInput.displayName = 'Input';\n\nexport { Input };\n"
     },
     {
       "type": "css",
-      "name": "input.module.css",
+      "name": "input.module",
       "content": ".input {\n  display: flex;\n  height: 2.5rem;\n  width: 100%;\n  border-radius: calc(var(--radius) - 2px);\n  border-width: 1px;\n  border-color: hsl(var(--input));\n  background-color: hsl(var(--background));\n  padding-left: 0.75rem;\n  padding-right: 0.75rem;\n  padding-top: 0.5rem;\n  padding-bottom: 0.5rem;\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  --tw-ring-offset-color: hsl(var(--background));\n}\n.input::file-selector-button {\n  border-width: 0px;\n  background-color: transparent;\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  font-weight: 500;\n}\n.input::placeholder {\n  color: hsl(var(--muted-foreground));\n}\n.input:focus-visible {\n  outline: 2px solid transparent;\n  outline-offset: 2px;\n  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0\n    var(--tw-ring-offset-width) var(--tw-ring-offset-color);\n  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0\n    calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);\n  box-shadow:\n    var(--tw-ring-offset-shadow), var(--tw-ring-shadow),\n    var(--tw-shadow, 0 0 #0000);\n  --tw-ring-color: hsl(var(--ring));\n  --tw-ring-offset-width: 2px;\n}\n.input:disabled {\n  cursor: not-allowed;\n  opacity: 0.5;\n}\n"
     }
   ]
