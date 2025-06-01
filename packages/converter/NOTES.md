@@ -29,6 +29,7 @@ this should not be an issue placing it in the same `ui` folder as shadcn (if the
 - label               # ⚠️ possibly with `findCvaExpressions()`
 - nevigation-menu     # ⚠️ possibly with `findCvaExpressions()` - but missing group styles
 - pagination          # ❌ might be able to extend `findCvaExpressions()` to handle this
+- sheet               # ❌ need to extend `findCvaExpressions()` to handle
 - sonner              # ❌ needs a custom converter built
 - toggle              # ⚠️ possibly with `findCvaExpressions()`
 - toggle-group        # ⚠️ possibly with `findCvaExpressions()`

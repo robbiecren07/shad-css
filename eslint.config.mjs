@@ -6,7 +6,6 @@ import js from '@eslint/js'
 import { FlatCompat } from '@eslint/eslintrc'
 
 const __filename = fileURLToPath(import.meta.url)
-
 const __dirname = path.dirname(__filename)
 
 const compat = new FlatCompat({
@@ -20,18 +19,15 @@ export default defineConfig([
   {
     extends: compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
     plugins: {},
-
     settings: {
       next: {
         rootDir: ['apps/*/'],
       },
     },
-
     rules: {
       semi: ['error', 'never'],
       quotes: ['error', 'single'],
       '@next/next/no-html-link-for-pages': 'off',
-
       'padding-line-between-statements': [
         'error',
         {
@@ -54,7 +50,6 @@ export default defineConfig([
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
-
     languageOptions: {
       parser: tsParser,
     },

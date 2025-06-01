@@ -1,0 +1,20 @@
+{
+  "name": "progress",
+  "dependencies": [
+    "@radix-ui/react-progress"
+  ],
+  "registryDependencies": [],
+  "type": "components:ui",
+  "files": [
+    {
+      "type": "tsx",
+      "name": "index.tsx",
+      "content": "'use client';\n\nimport * as React from 'react';\nimport * as ProgressPrimitive from '@radix-ui/react-progress';\nimport { cn } from '@/lib/utils';\nimport styles from './progress.module.css';\n\nconst Progress = React.forwardRef<\n  React.ElementRef<typeof ProgressPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>\n>(({ className, value, ...props }, ref) => (\n  <ProgressPrimitive.Root\n    ref={ref}\n    className={cn(styles.progress, className)}\n    {...props}\n  >\n    <ProgressPrimitive.Indicator\n      className={styles.progressIndicator}\n      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}\n    />\n  </ProgressPrimitive.Root>\n));\nProgress.displayName = ProgressPrimitive.Root.displayName;\n\nexport { Progress };\n"
+    },
+    {
+      "type": "css",
+      "name": "progress.module.css",
+      "content": ".progress {\n  position: relative;\n  height: 1rem;\n  width: 100%;\n  overflow: hidden;\n  border-radius: 9999px;\n  background-color: hsl(var(--secondary));\n}\n.progressIndicator {\n  height: 100%;\n  width: 100%;\n  flex: 1 1 0%;\n  background-color: hsl(var(--primary));\n  transition-property: all;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n"
+    }
+  ]
+}
