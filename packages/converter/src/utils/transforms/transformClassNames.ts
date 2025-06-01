@@ -2,21 +2,29 @@ import ts from 'typescript'
 import { transformClassExpression } from './transformClassExpression'
 
 /**
- * Returns a TypeScript AST transformer that replaces className string/className utility calls
- * with CSS module references using the provided classReplacementMap.
+ * Creates a TypeScript AST transformer that rewrites JSX `className` attributes
+ * to use CSS module references based on the given classReplacementMap.
+ *
+ * Replaces:
+ *   - className="foo"          →  className={styles.foo}
+ *   - className={cn(...)}      →  className={cn(styles.foo, ...)}
+ *   - className={...}          →  className={styles.foo} (where possible)
+ *
+ * @param classReplacementMap Map of original class names to CSS module identifiers
+ * @returns Transformer function suitable for use with ts.transform
  */
 export function transformClassNames(classReplacementMap: Record<string, string>) {
   return <T extends ts.Node>(context: ts.TransformationContext) => {
     const visit = (node: ts.Node): ts.Node => {
-      // Find JSXAttribute className
+      // Only process JSX className attributes
       if (ts.isJsxAttribute(node) && node.name.getText() === 'className' && node.initializer) {
         const init = node.initializer
 
-        // className="..."
+        // Handle: className="foo"
         if (ts.isStringLiteral(init)) {
           const replacement = classReplacementMap[init.text]
           if (replacement) {
-            // Replace with styles object reference (as Identifier)
+            // Replace with: className={styles.foo}
             return ts.factory.updateJsxAttribute(
               node,
               node.name,
@@ -25,7 +33,7 @@ export function transformClassNames(classReplacementMap: Record<string, string>)
           }
         }
 
-        // className={cn(...)} or className={...}
+        // Handle: className={...} or className={cn(...)}
         if (ts.isJsxExpression(init) && init.expression) {
           const transformed = transformClassExpression(init.expression, classReplacementMap)
           return ts.factory.updateJsxAttribute(
@@ -36,9 +44,11 @@ export function transformClassNames(classReplacementMap: Record<string, string>)
         }
       }
 
+      // Visit all other nodes recursively
       return ts.visitEachChild(node, visit, context)
     }
 
+    // Entry point for the transformer
     return (node: T) => ts.visitNode(node, visit)
   }
 }

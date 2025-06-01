@@ -10,20 +10,20 @@ import { capitalize, removeForbiddenApplyUtils, toCamelCase } from './helpers'
 import { EXCLUDE_STYLESHEET_INJECTION, FORBIDDEN_CLASS_NAMES } from '@/lib/constants'
 
 /**
- * Converts a React component from inline Tailwind classes to CSS Modules format.
+ * Converts a React component from inline Tailwind classes and CVA usage to CSS Modules format.
  *
- * This function performs a multi-step transformation:
- * 1. Creates a TypeScript source file from the TSX content
- * 2. Extracts all class name expressions from the component
- * 3. Generates CSS module styles for each class name
- * 4. Transforms the AST to replace class names with CSS module references
- * 5. Injects the CSS module import into the transformed TSX
+ * Steps:
+ * 1. Parse the TSX content to a TypeScript source file.
+ * 2. Extract CVA (class-variance-authority) blocks and prepare base/variant class mappings and CSS.
+ * 3. Optionally: Replace the original cva() call with CSS module references (see note in code).
+ * 4. Extract className usages from JSX, generating CSS module rules and mapping each to styles.xxx.
+ * 5. Compile the CSS using Tailwind.
+ * 6. Transform the TypeScript AST to replace class names and CVA references.
+ * 7. Inject the CSS module import into the final TSX.
  *
- * @param componentName The name of the component, used for generating CSS class names and file names.
- * @param tsxContent The content of the TSX file as a string, which contains JSX elements and class names.
- * @returns A Promise that resolves to an object containing:
- * - `tsx`: The transformed TSX content with class names replaced by CSS module imports.
- * - `css`: The compiled CSS content as a string, containing the styles for the component.
+ * @param componentName - Name of the component (used for class/file names)
+ * @param tsxContent - Raw TSX string of the component
+ * @returns Promise with the transformed TSX content and compiled CSS string
  */
 export async function convertComponent(
   componentName: string,
@@ -42,9 +42,9 @@ export async function convertComponent(
   const cssSnippets: string[] = []
   const classReplacementMap: Record<string, string> = {}
 
-  // Step 1: Handle class-variance-authority (cva) blocks
-  // This extracts cva calls and prepares CSS class names based on the component name.
-  // E.g. buttonBase, buttonDestructive, buttonOutline, etc.
+  // Handle class-variance-authority (cva) blocks:
+  //   - Generate base and variant CSS classes
+  //   - Build replacement map for use in AST transforms
   if (cvaBlocks.length > 0) {
     for (const cva of cvaBlocks) {
       // Handle base class
@@ -72,13 +72,8 @@ export async function convertComponent(
     }
   }
 
-  // Step 2: Extract class names from the component
-  // This creates a map of display names to their class name usages
+  // Extract class names from JSX and add to CSS + replacement map.
   const classMap = findClassNameExpressions(sourceFile)
-
-  // Step 3: Generate CSS module styles and replacement map
-  // - cssSnippets: Array of CSS rules for each class
-  // - classReplacementMap: Map of original class names to CSS module references
 
   // Create a map of class names to their usages
   for (const [displayName, usages] of Object.entries(classMap)) {
@@ -103,15 +98,11 @@ export async function convertComponent(
     }
   }
 
-  // Step 4: Clean and compile CSS
-  // - Join CSS snippets into a single string
-  // - Process Tailwind variables and utilities
+  // Compile CSS with Tailwind utilities.
   const rawCss = cssSnippets.join('\n\n')
   const compiledCss = await tailwindToCss(rawCss)
 
-  // Step 5: Create AST transformer for className + cva replacements
-  // - Set up TypeScript printer for generating transformed code
-  // - Define transformer to replace class names with CSS module references
+  // Transform TSX: replace className values and cva() references.
   const printer = ts.createPrinter()
 
   const transforms = [
@@ -128,13 +119,8 @@ export async function convertComponent(
   // Generate the transformed TSX content
   const transformedTsx = printer.printFile(transformed as ts.SourceFile)
 
-  // Step 6: Inject CSS module import
-  // - Add import statement for the generated CSS module
-  // - Place import at the bottom of the existing import list
+  // Inject CSS module import, unless excluded for this component.
   let finalTsx = transformedTsx
-
-  // If the component is not in the EXCLUDE_STYLESHEET_INJECTION list,
-  // inject the CSS module import statement
   if (!EXCLUDE_STYLESHEET_INJECTION.includes(componentName)) {
     finalTsx = injectStylesImport(
       transformedTsx,

@@ -2,6 +2,7 @@ import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import { toCamelCase, toPascalCase } from './helpers'
 import { basicHtmlTags } from '@/lib/constants'
+import unusedImports from 'eslint-plugin-unused-imports'
 
 /**
  * Formats code using Prettier with consistent configuration.
@@ -109,8 +110,12 @@ export async function formatAndLint(tsPath: string, tsxCode: string): Promise<st
   const eslint = new ESLint({
     fix: true,
     overrideConfig: {
+      plugins: {
+        'unused-imports': unusedImports,
+      },
       rules: {
         semi: ['error', 'always'],
+        'unused-imports/no-unused-imports': 'error',
         'padding-line-between-statements': [
           'error',
           { blankLine: 'always', prev: '*', next: 'export' },

@@ -2,31 +2,32 @@ import ts from 'typescript'
 import { capitalize } from '../helpers'
 
 /**
- * Transforms class name expressions into CSS module references.
+ * Recursively transforms any TypeScript expression representing class names
+ * (including calls like cn(...), variants(), arrays, conditionals, etc.)
+ * into references to their corresponding CSS module style.
  *
- * This function handles various expression types that may contain class names:
- * 1. Call expressions (e.g., cn(...))
- * 2. Array literals (e.g., ["class1", "class2"])
- * 3. Binary expressions (e.g., string concatenation)
- * 4. Conditional expressions (e.g., ternary operators)
- * 5. Simple string literals
+ * This handles a variety of code patterns:
+ *   - Custom variant helpers like toggleVariants() and buttonVariants()
+ *   - Utility calls (e.g., cn("a", cond && "b"))
+ *   - Arrays and binary (string concatenation) expressions
+ *   - Ternaries and direct string literals
  *
- * @param expr A TypeScript expression that may contain class names.
- * @param map A mapping object where keys are original class names and values are CSS module references.
- * @returns A transformed TypeScript expression with class names replaced by CSS module references.
+ * @param expr TypeScript expression that may represent one or more class names.
+ * @param map Map of original class names to their CSS module reference identifiers.
+ * @returns The transformed expression with class names replaced as needed.
  */
 export function transformClassExpression(
   expr: ts.Expression,
   map: Record<string, string>
 ): ts.Expression {
-  // --- 1. Handle toggleVariants() and toggleVariants({...}) calls FIRST!
+  // Special case: handle toggleVariants() calls (with variant/size props)
   if (
     ts.isCallExpression(expr) &&
     ((ts.isIdentifier(expr.expression) && expr.expression.text === 'toggleVariants') ||
       (ts.isPropertyAccessExpression(expr.expression) &&
         expr.expression.name.text === 'toggleVariants'))
   ) {
-    // If there is an argument object, try to build the styles lookup
+    // If arguments are provided, generate the correct styles lookup for variant/size
     if (expr.arguments.length === 1 && ts.isObjectLiteralExpression(expr.arguments[0])) {
       const props = expr.arguments[0].properties
       let variantProp = null
@@ -38,7 +39,7 @@ export function transformClassExpression(
         }
       }
 
-      // Build a cn(...) call with the appropriate computed style accesses
+      // Access styles for both variant and size (as: styles[`toggleItem${variant}`], etc.)
       const variantExpr = ts.factory.createElementAccessExpression(
         ts.factory.createIdentifier('toggleStyles'),
         ts.factory.createTemplateExpression(ts.factory.createTemplateHead('toggleItem'), [
@@ -59,35 +60,35 @@ export function transformClassExpression(
         ])
       )
 
-      // return: cn(styles[`toggleItem${variant}`], styles[`toggleItem${size}`])
+      // Return: cn(styles[`toggleItem${variant}`], styles[`toggleItem${size}`])
       return ts.factory.createCallExpression(ts.factory.createIdentifier('cn'), undefined, [
         variantExpr,
         sizeExpr,
       ])
     }
 
-    // fallback: just use styles.toggleItemDefault if no args
+    // Default/fallback if no arguments: styles.toggleItemDefault
     return ts.factory.createPropertyAccessExpression(
       ts.factory.createIdentifier('styles'),
       ts.factory.createIdentifier('toggleItemDefault')
     )
   }
 
-  // --- 2. Handle buttonVariants() and buttonVariants({...})
+  // Special case: handle buttonVariants() calls (with or without "variant" prop)
   if (
     ts.isCallExpression(expr) &&
     ((ts.isIdentifier(expr.expression) && expr.expression.text === 'buttonVariants') ||
       (ts.isPropertyAccessExpression(expr.expression) &&
         expr.expression.name.text === 'buttonVariants'))
   ) {
-    // buttonVariants()
+    // No arguments: default to buttonStyles.buttonBase
     if (expr.arguments.length === 0) {
       return ts.factory.createPropertyAccessExpression(
         ts.factory.createIdentifier('buttonStyles'),
         ts.factory.createIdentifier('buttonBase')
       )
     }
-    // buttonVariants({ variant: "outline" })
+    // If variant prop provided: map to buttonStyles.buttonVariant
     if (expr.arguments.length === 1) {
       const arg = expr.arguments[0]
       if (ts.isObjectLiteralExpression(arg)) {
@@ -109,21 +110,20 @@ export function transformClassExpression(
     }
   }
 
-  // --- 3. Now handle all other call expressions (including cn(...))
+  // Generic case: transform call expressions (e.g., cn(...))
   if (ts.isCallExpression(expr)) {
-    // Process each argument:
-    // - Replace string literals with CSS module references
-    // - Recursively transform nested expressions
+    // Replace string literals with mapped identifiers
     const args = expr.arguments.map((arg) => {
       if (ts.isStringLiteral(arg) && map[arg.text]) {
         return ts.factory.createIdentifier(map[arg.text])
       }
+      // Recursively process all other arguments
       return ts.isExpression(arg) ? transformClassExpression(arg, map) : arg
     })
     return ts.factory.updateCallExpression(expr, expr.expression, expr.typeArguments, args)
   }
 
-  // Handle array literals
+  // Transform arrays of class names (e.g., ["a", cond && "b"])
   if (ts.isArrayLiteralExpression(expr)) {
     // Replace string literals with CSS module references
     const elements = expr.elements.map((el) =>
@@ -132,7 +132,7 @@ export function transformClassExpression(
     return ts.factory.updateArrayLiteralExpression(expr, elements)
   }
 
-  // Handle string concatenation
+  // Handle string concatenation (e.g., "a" + cond)
   if (ts.isBinaryExpression(expr)) {
     // Recursively transform both sides of the expression
     return ts.factory.updateBinaryExpression(
@@ -143,7 +143,7 @@ export function transformClassExpression(
     )
   }
 
-  // Handle ternary operators
+  // Handle ternary (conditional) expressions (e.g., cond ? "a" : "b")
   if (ts.isConditionalExpression(expr)) {
     // Recursively transform both branches
     return ts.factory.updateConditionalExpression(
@@ -156,10 +156,11 @@ export function transformClassExpression(
     )
   }
 
-  // Handle simple string literals
+  // Replace any direct string literal if it maps to a CSS module reference
   if (ts.isStringLiteral(expr) && map[expr.text]) {
     return ts.factory.createIdentifier(map[expr.text])
   }
 
+  // For any other expression, leave as-is
   return expr
 }

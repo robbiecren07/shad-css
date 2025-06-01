@@ -19,8 +19,6 @@ import { normalizePostCssOutput } from './helpers'
  */
 export async function tailwindToCss(cssInput: string): Promise<string> {
   // Process CSS through PostCSS pipeline
-  // 1. Apply Tailwind CSS with disabled preflight
-  // 2. Handle nested CSS rules
   const result = await postcss([
     tailwindcss({
       config: './tailwind.config.js',
@@ -35,10 +33,11 @@ export async function tailwindToCss(cssInput: string): Promise<string> {
   /**
    * Note: Currently, removing Tailwind-specific variables creates issues with
    * the generated CSS, keyframes, animations, and other utilities.
+   *
+   * Clean up Tailwind-specific variables
+   * - Removes --tw-* custom properties
+   * - Replaces var(...) references with actual values
    */
-  // Clean up Tailwind-specific variables
-  // - Removes --tw-* custom properties
-  // - Replaces var(...) references with actual values
   //const cleanedCss = await cleanTailwindVars(result.css)
 
   // Normalize CSS formatting

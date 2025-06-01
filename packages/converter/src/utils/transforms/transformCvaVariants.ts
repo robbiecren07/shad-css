@@ -2,18 +2,24 @@ import ts from 'typescript'
 import { capitalize, toCamelCase } from '../helpers'
 
 /**
- * AST transformer to rewrite cva() calls from Tailwind strings to styles.xxx references.
+ * TypeScript AST transformer that rewrites cva() calls,
+ * converting Tailwind string values into CSS module style references.
  *
- * Example:
- *   cva('tw-classes', { variants: { variant: { default: 'tw', ... } } })
- * becomes:
- *   cva(styles.buttonBase, { variants: { variant: { default: styles.buttonDefault, ... } } })
+ * For example:
+ *   cva('tw-classes', { variants: { variant: { default: 'tw', destructive: 'tw2' }}})
+ * Becomes:
+ *   cva(styles.buttonBase, { variants: { variant: { default: styles.buttonDefault, destructive: styles.buttonDestructive }}})
+ *
+ * This ensures all class assignments are type-safe and point to generated CSS modules.
+ *
+ * @param componentName Name of the component, used to generate CSS module keys.
+ * @returns Transformer suitable for use in ts.transform().
  */
 export function transformCvaVariants(componentName: string) {
   const baseKey = toCamelCase(`${componentName}Base`)
   return <T extends ts.Node>(context: ts.TransformationContext) => {
     const visit = (node: ts.Node): ts.Node => {
-      // Find variable declarations like: const buttonVariants = cva(...)
+      // Transform: const buttonVariants = cva(...)
       if (
         ts.isVariableDeclaration(node) &&
         node.initializer &&
@@ -22,7 +28,7 @@ export function transformCvaVariants(componentName: string) {
       ) {
         const [baseClassNode, optionsNode] = node.initializer.arguments
 
-        // Replace base class string literal with styles.xxx
+        // Replace the base Tailwind string with styles.xxx
         let newBaseClassNode = baseClassNode
         if (baseClassNode && ts.isStringLiteral(baseClassNode)) {
           newBaseClassNode = ts.factory.createPropertyAccessExpression(
@@ -31,16 +37,17 @@ export function transformCvaVariants(componentName: string) {
           )
         }
 
-        // Deep rewrite for variants and size objects
+        // Recursively rewrite variant values (e.g., 'default': 'tw') as styles.xxx
         let newOptionsNode = optionsNode
         if (optionsNode && ts.isObjectLiteralExpression(optionsNode)) {
           const newProps = optionsNode.properties.map((prop) => {
+            // Only process the "variants" property
             if (
               ts.isPropertyAssignment(prop) &&
               prop.name.getText() === 'variants' &&
               ts.isObjectLiteralExpression(prop.initializer)
             ) {
-              // For each variant type (e.g. variant, size)
+              // Each variant type (e.g., variant, size)
               const newVariants = prop.initializer.properties.map((v) => {
                 if (
                   ts.isPropertyAssignment(v) &&
@@ -54,7 +61,7 @@ export function transformCvaVariants(componentName: string) {
                       ts.isIdentifier(val.name) &&
                       ts.isStringLiteral(val.initializer)
                     ) {
-                      // Generate the styles key, e.g. buttonDestructive
+                      // Convert: 'default': 'tw' → 'default': styles.buttonDefault
                       const stylesKey = componentName.toLowerCase() + capitalize(val.name.text)
                       return ts.factory.updatePropertyAssignment(
                         val,
@@ -87,7 +94,7 @@ export function transformCvaVariants(componentName: string) {
           newOptionsNode = ts.factory.updateObjectLiteralExpression(optionsNode, newProps)
         }
 
-        // Return new variable declaration with updated cva() call
+        // Build new argument list with transformed values
         const originalArgs = node.initializer.arguments
 
         let newArgs: ts.Expression[] = []
@@ -96,10 +103,10 @@ export function transformCvaVariants(componentName: string) {
         } else if (originalArgs.length === 2) {
           newArgs = [newBaseClassNode, newOptionsNode]
         } else {
-          // fallback: preserve all args
-          newArgs = [...originalArgs]
+          newArgs = [...originalArgs] // fallback: preserve all args
         }
 
+        // Return updated variable declaration with rewritten cva() call
         return ts.factory.updateVariableDeclaration(
           node,
           node.name,
@@ -113,6 +120,7 @@ export function transformCvaVariants(componentName: string) {
           )
         )
       }
+      // Recursively visit all other nodes
       return ts.visitEachChild(node, visit, context)
     }
     return (node: T) => ts.visitNode(node, visit)
