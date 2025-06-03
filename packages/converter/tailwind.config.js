@@ -14,6 +14,19 @@ module.exports = {
       })
     },
   ],
+  safelist: [
+    'max-h-[--radix-context-menu-content-available-height]',
+    'origin-[--radix-context-menu-content-transform-origin]',
+    'origin-[--radix-hover-card-content-transform-origin]',
+    'origin-[--radix-menubar-content-transform-origin]',
+    'origin-[--radix-menubar-content-transform-origin]',
+    'origin-[--radix-popover-content-transform-origin]',
+    'origin-[--radix-select-content-transform-origin]',
+    'max-h-[--radix-select-content-available-height]',
+    'h-[var(--radix-select-trigger-height)]',
+    'min-w-[var(--radix-select-trigger-width)]',
+    'origin-[--radix-tooltip-content-transform-origin]',
+  ],
   theme: {
     extend: {
       borderRadius: {
