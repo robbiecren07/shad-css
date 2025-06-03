@@ -20,5 +20,4 @@ export function createCnHelper(utilsPath: string) {
   }
 
   fs.writeFileSync(utilsPath, contents)
-  console.log(`\n✅ Added cn helper to ${utilsPath}`)
 }

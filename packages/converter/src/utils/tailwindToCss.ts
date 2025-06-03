@@ -1,8 +1,9 @@
 import postcss from 'postcss'
 import tailwindcss from 'tailwindcss'
 import postcssNested from 'postcss-nested'
+import postcssCombineDuplicated from 'postcss-combine-duplicated-selectors'
+import postcssDiscardEmpty from 'postcss-discard-empty'
 import { moveKeyframesToBottomPlugin } from '@/lib/postcssPlugins'
-//import { cleanTailwindVars } from './cleanTailwindVars'
 import { normalizePostCssOutput } from './helpers'
 
 /**
@@ -27,7 +28,9 @@ export async function tailwindToCss(cssInput: string): Promise<string> {
       },
     }),
     postcssNested,
+    postcssCombineDuplicated,
     moveKeyframesToBottomPlugin,
+    postcssDiscardEmpty,
   ]).process(cssInput, { from: undefined })
 
   /**
@@ -41,8 +44,6 @@ export async function tailwindToCss(cssInput: string): Promise<string> {
   //const cleanedCss = await cleanTailwindVars(result.css)
 
   // Normalize CSS formatting
-  // - Standardizes whitespace and line breaks
-  // - Prepares for consistent Prettier processing
   const compactCss = normalizePostCssOutput(result.css)
 
   return compactCss

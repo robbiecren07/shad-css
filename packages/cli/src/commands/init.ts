@@ -156,10 +156,11 @@ export async function runInit(): Promise<ShadCssConfig> {
     // Create json configuration file
     fs.writeFileSync(path.join(process.cwd(), 'shad-css.json'), JSON.stringify(config, null, 2))
 
-    // Install the correct icon library
+    // Install required dependencies
     const packageManager = detectPackageManager()
-    let initDep = ['classnames']
+    let initDep = ['classnames', 'class-variance-authority']
 
+    // Install the correct icon library
     if (config.iconLibrary === 'lucide-react') {
       initDep.push('lucide-react')
     } else if (config.iconLibrary === 'react-icons') {
@@ -176,7 +177,6 @@ export async function runInit(): Promise<ShadCssConfig> {
     createCnHelper(cnHelperPath)
 
     console.log('\n✅ Initialization complete!')
-    console.log(`Your components will be installed in: ${config.outputDir}`)
 
     return config
   } catch (error) {

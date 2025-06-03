@@ -23,6 +23,7 @@ export type ComponentFile = {
 
 export type AddComponentOptions = {
   targetDir: string
+  config: ShadCssConfig
   files: ComponentFile[]
 }
 
@@ -36,4 +37,5 @@ export type AddComponentWithDepsParams = {
   }
   __dirname: string
   packageManager: string
+  depsSet?: Set<string>
 }

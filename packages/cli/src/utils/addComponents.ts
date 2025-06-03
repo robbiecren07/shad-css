@@ -3,16 +3,21 @@ import fs from 'node:fs'
 import path from 'path'
 import prompts from 'prompts'
 import { addSingleComponent } from './addSingleComponent'
-import { installDependency } from './installDependency'
 
 export async function addComponents(params: AddComponentWithDepsParams) {
-  const { component, config, options = {}, __dirname, packageManager } = params
+  const {
+    component,
+    config,
+    options = {},
+    __dirname,
+    packageManager,
+    depsSet = new Set<string>(),
+  } = params
 
   const { overwrite = false, visited = new Set<string>(), silent = false } = options
 
   // Prevent re-installing the same registry component
   if (visited.has(component)) return
-  visited.add(component)
 
   // Load component metadata
   const componentPath = path.join(
@@ -27,19 +32,6 @@ export async function addComponents(params: AddComponentWithDepsParams) {
   }
 
   const componentData: ComponentData = JSON.parse(fs.readFileSync(componentPath, 'utf-8'))
-
-  // Handle registryDependencies first, recursively
-  if (componentData.registryDependencies && componentData.registryDependencies.length > 0) {
-    for (const dep of componentData.registryDependencies) {
-      await addComponents({
-        component: dep,
-        config,
-        options: { overwrite, visited, silent: true }, // silent: true prevents log spam for internals
-        __dirname,
-        packageManager,
-      })
-    }
-  }
 
   // Now add this component's files
   const targetDir = path.join(process.cwd(), config.outputDir, component)
@@ -66,21 +58,38 @@ export async function addComponents(params: AddComponentWithDepsParams) {
       if (!silent) {
         console.log(`Add command cancelled for '${component}'. No files were overwritten.`)
       }
+      // Mark as visited even if not overwritten, to avoid future prompts
+      visited.add(component)
       return
     }
   }
 
+  // Mark as visited after confirmation
+  visited.add(component)
+
+  // install component dependencies recursively
+  if (componentData.registryDependencies && componentData.registryDependencies.length > 0) {
+    for (const dep of componentData.registryDependencies) {
+      await addComponents({
+        component: dep,
+        config,
+        options: { overwrite, visited, silent: true },
+        __dirname,
+        packageManager,
+        depsSet,
+      })
+    }
+  }
+
+  // Then install this component (files & deps)
   await addSingleComponent({
     targetDir,
+    config,
     files: componentData.files,
   })
 
-  // Install NPM dependencies (skip if already installed by a previous registryDependency)
+  // collect this component's dependencies
   if (componentData.dependencies && componentData.dependencies.length > 0) {
-    installDependency(componentData.dependencies, packageManager)
-  }
-
-  if (!silent) {
-    console.log(`\n✅ Successfully added ${component} component!`)
+    componentData.dependencies.forEach((dep) => depsSet.add(dep))
   }
 }
