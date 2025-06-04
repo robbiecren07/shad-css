@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import prettier from 'prettier'
+import { baseStyles } from '@/lib/contants'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -42,7 +43,7 @@ export function formatCssVarsForGlobalStylesheet(
 ): string {
   const formatVars = (vars: Record<string, string>) =>
     Object.entries(vars)
-      .map(([key, value]) => `  --${key}: ${value};`)
+      .map(([key, value]) => `  --${key}: hsl(${value});`)
       .join('\n')
 
   return [
@@ -54,6 +55,7 @@ export function formatCssVarsForGlobalStylesheet(
     formatVars(cssVars.dark),
     '}',
     '',
+    baseStyles,
   ].join('\n')
 }
 
