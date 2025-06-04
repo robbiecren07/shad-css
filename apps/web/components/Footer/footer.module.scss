@@ -1,0 +1,26 @@
+.footer {
+  position: relative;
+  width: 100%;
+  padding: 2rem 1rem;
+  border-top: 1px solid hsl(var(--border));
+
+  @media (min-width: 1024px) {
+    padding: 3rem 2rem;
+  }
+
+  &_inner {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+
+  &_text {
+    color: hsl(var(--accent));
+    font-size: 1rem;
+    text-align: center;
+
+    a {
+      text-underline-offset: 3px;
+      text-decoration: underline;
+    }
+  }
+}

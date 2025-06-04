@@ -1,0 +1,172 @@
+.hero {
+  position: relative;
+  width: 100%;
+  padding: 5rem 1rem;
+
+  @media (min-width: 1024px) {
+    padding: 5rem 2rem;
+  }
+
+  &_inner {
+    max-width: 64rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  &_header {
+    margin-bottom: 2rem;
+  }
+
+  &_badge {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &_badgeIcon {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.25rem;
+  }
+
+
+  &_title {
+    font-size: 2.75rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+
+    @media (min-width: 1024px) {
+      font-size: 3.75rem;
+    }
+
+    &_highlight {
+      color: #2563eb;
+      display: block;
+    }
+  }
+
+  &_text {
+    color: hsl(var(--accent));
+    font-size: 1.25rem;
+    max-width: 42rem;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+  }
+}
+
+.selector {
+  margin-bottom: 3rem;
+
+  &_header {
+    margin-bottom: 1rem;
+
+    &_title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    &_subtitle {}
+  }
+
+  &_popover {
+    max-width: 28rem;
+    margin: 0 auto;
+
+    .selector_comboboxBtn {
+      width: 100%;
+      justify-content: space-between;
+      height: 3rem;
+      text-align: left;
+    }
+
+    .selector_comboboxValue {
+      display: flex;
+      align-items: center;
+
+      .selector_comboboxIcon {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.5rem;
+        color: #2563eb;
+      }
+    }
+
+    .selector_placeholder {}
+
+    .selector_chevron {
+      margin-left: 0.5rem;
+      height: 1rem;
+      width: 1rem;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    &_content {
+      @media (min-width: 640px) {
+        width: 28rem;
+      }
+    }
+  }
+}
+
+.selectedCard {
+  max-width: 42rem;
+  margin: 0 auto;
+  text-align: left;
+
+  .selectedCard_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .selectedCard_title {
+      display: flex;
+      align-items: center;
+
+      .selectedCard_icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.5rem;
+        color: #2563eb;
+      }
+    }
+  }
+
+  .selectedCard_content {
+    .selectedCard_featuresTitle {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .selectedCard_action {
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+
+      .selectedCard_docBtn {
+        width: 100%;
+
+        @media (min-width: 640px) {
+          width: auto;
+        }
+
+        .selectedCard_docIcon {
+          width: 1rem;
+          height: 1rem;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+.combo_icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  opacity: 0;
+
+  &_active {
+    opacity: 1;
+  }
+}

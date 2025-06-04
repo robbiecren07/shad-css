@@ -1,0 +1,137 @@
+[
+  {
+    "name": "accordion"
+  },
+  {
+    "name": "alert"
+  },
+  {
+    "name": "alert-dialog"
+  },
+  {
+    "name": "aspect-ratio"
+  },
+  {
+    "name": "avatar"
+  },
+  {
+    "name": "badge"
+  },
+  {
+    "name": "breadcrumb"
+  },
+  {
+    "name": "button"
+  },
+  {
+    "name": "calendar"
+  },
+  {
+    "name": "card"
+  },
+  {
+    "name": "carousel"
+  },
+  {
+    "name": "chart"
+  },
+  {
+    "name": "checkbox"
+  },
+  {
+    "name": "collapsible"
+  },
+  {
+    "name": "command"
+  },
+  {
+    "name": "context-menu"
+  },
+  {
+    "name": "dialog"
+  },
+  {
+    "name": "drawer"
+  },
+  {
+    "name": "dropdown-menu"
+  },
+  {
+    "name": "form"
+  },
+  {
+    "name": "hover-card"
+  },
+  {
+    "name": "input"
+  },
+  {
+    "name": "input-otp"
+  },
+  {
+    "name": "label"
+  },
+  {
+    "name": "menubar"
+  },
+  {
+    "name": "navigation-menu"
+  },
+  {
+    "name": "pagination"
+  },
+  {
+    "name": "popover"
+  },
+  {
+    "name": "progress"
+  },
+  {
+    "name": "radio-group"
+  },
+  {
+    "name": "resizable"
+  },
+  {
+    "name": "scroll-area"
+  },
+  {
+    "name": "select"
+  },
+  {
+    "name": "separator"
+  },
+  {
+    "name": "sheet"
+  },
+  {
+    "name": "skeleton"
+  },
+  {
+    "name": "slider"
+  },
+  {
+    "name": "sonner"
+  },
+  {
+    "name": "switch"
+  },
+  {
+    "name": "table"
+  },
+  {
+    "name": "tabs"
+  },
+  {
+    "name": "textarea"
+  },
+  {
+    "name": "toggle"
+  },
+  {
+    "name": "toggle-group"
+  },
+  {
+    "name": "tooltip"
+  }
+]

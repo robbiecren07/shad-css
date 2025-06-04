@@ -1,0 +1,45 @@
+.header {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  z-index: 50;
+
+  &_nav {
+    position: relative;
+    width: 100%;
+
+    &_inner {
+      max-width: 80rem;
+      padding: 0 1rem;
+      margin: 0 auto;
+
+      @media (min-width: 1024px) {
+        padding: 0 2rem;
+      }
+    }
+
+    &_content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 4rem;
+    }
+  }
+
+  &_logoGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+
+  &_logo {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+}

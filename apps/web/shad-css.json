@@ -1,0 +1,8 @@
+{
+  "theme": "default",
+  "baseColor": "neutral",
+  "outputDir": "components/ui",
+  "componentsAlias": "@/*",
+  "iconLibrary": "lucide-react",
+  "globalStylesheet": "app/globals.css"
+}

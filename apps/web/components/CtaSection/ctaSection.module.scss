@@ -1,0 +1,47 @@
+.section {
+  position: relative;
+  width: 100%;
+  padding: 5rem 1rem;
+
+  @media (min-width: 1024px) {
+    padding: 5rem 2rem;
+  }
+
+  &_inner {
+    max-width: 64rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  &_content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &_heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  &_text {
+    color: hsl(var(--accent));
+  }
+
+  &_actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+
+    @media (min-width: 640px) {
+      flex-direction: row;
+    }
+  }
+
+  &_icon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
+}
