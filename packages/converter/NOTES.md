@@ -7,26 +7,21 @@
 which is `const safeClassName = removeForbiddenApplyUtils(className)`. We get an error in `tailwindToCss.ts` when using `postcss`,
 it does not like that we add those tailwind classes to `@apply` since its a custom tailwind css/class name.
 
-- Fix buttonVariants(), converter removes it in some components and replaces with `buttonStyles.` that logic doesnt work,
-e.g. `alert-dialog` should be able to just use `import { buttonVariants } from "@/components/ui/button"`.
-
 
 ### Components to address
 
-- alert-dialog        # ⚠️ possibly resolved with update in `transformClassExpression()`
-- alert               # ⚠️ possibly with `findCvaExpressions()`
-- badge               # ⚠️ possibly with `findCvaExpressions()`
-- button              # ⚠️ possibly with `findCvaExpressions()`
+- alert               # ⚠️ fixed with `findCvaExpressions()` but needs testing
+- badge               # ⚠️ fixed with `findCvaExpressions()` but needs testing
+- button              # ⚠️ fixed with `findCvaExpressions()` but needs testing
 - calendar            # ⚠️ manually converted
 - carousel            # ⚠️ manually converted
 - chart               # ⚠️ manually converted
-- label               # ⚠️ possibly with `findCvaExpressions()`
-- nevigation-menu     # ⚠️ possibly with `findCvaExpressions()` - but missing group styles
-- pagination          # ⚠️ no issues should be fine
+- label               # ⚠️ fixed with `findCvaExpressions()` but needs testing
+- nevigation-menu     # ⚠️ fixed with `findCvaExpressions()` - but missing group styles
+- pagination          # ⚠️ no issues should be fixed
 - select              # ⚠️ manually converted
 - sonner              # ⚠️ manually converted
-- toggle              # ⚠️ possibly with `findCvaExpressions()`
-- toggle-group        # ⚠️ possibly with `findCvaExpressions()`
+- toggle-group        # ⚠️ fixed with `findCvaExpressions()` but needs testing
 
 
 ## Testing
