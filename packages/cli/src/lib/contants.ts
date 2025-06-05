@@ -68,4 +68,8 @@ a {
   text-decoration: none;
 }
 
+menu, ol, ul {
+  list-style: none;
+}
+
 `

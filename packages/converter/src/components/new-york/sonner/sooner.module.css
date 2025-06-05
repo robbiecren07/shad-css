@@ -1,0 +1,29 @@
+.toast {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  box-shadow:
+    0 4px 24px 0 rgba(0, 0, 0, 0.13),
+    0 1.5px 4px 0 rgba(0, 0, 0, 0.09);
+  border-radius: var(--radius);
+}
+
+.toastDescription {
+  color: hsl(var(--muted-foreground));
+}
+
+.toastActionButton {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.toastCancelButton {
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}

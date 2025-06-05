@@ -38,6 +38,7 @@ import { convertComponent } from '@/utils/convertComponent'
 import prettier from 'prettier'
 import { createJsonFile } from '@/utils/createJsonFile'
 import { formatAndLint } from '@/utils/formatters'
+import { EXCLUDE_COMPONENTS_FROM_CONVERTER } from './lib/constants'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -130,7 +131,12 @@ async function convertAllInStyle(style: string) {
   console.log(`Converting all components for style "${style}"...`)
   for (const file of files) {
     const componentName = file.replace(/\.json$/, '')
-    await convert(componentName, style) // Handles error/log per-component
+    if (EXCLUDE_COMPONENTS_FROM_CONVERTER.includes(componentName)) {
+      console.error('Component is excluded from conversion:', componentName)
+      continue // Skip excluded components
+    } else {
+      await convert(componentName, style) // Handles error/log per-component
+    }
   }
   console.log(`\n🎉 Finished converting all components for "${style}"`)
 }
@@ -148,6 +154,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (componentName === 'all' || componentName === '--all') {
     convertAllInStyle(style)
   } else {
-    convert(componentName, style)
+    if (EXCLUDE_COMPONENTS_FROM_CONVERTER.includes(componentName)) {
+      console.error('Component is excluded from conversion:', componentName)
+      process.exit(0)
+    } else {
+      convert(componentName, style)
+    }
   }
 }

@@ -5,3 +5,14 @@ src/components/default/*/**.tsx
 src/components/default/*/**.css
 src/components/new-york/*/**.tsx
 src/components/new-york/*/**.css
+
+!src/components/default/calendar/*
+!src/components/new-york/calendar/*
+!src/components/default/carousel/*
+!src/components/new-york/carousel/*
+!src/components/default/chart/*
+!src/components/new-york/chart/*
+!src/components/default/sonner/*
+!src/components/new-york/sonner/*
+!src/components/default/select/*
+!src/components/new-york/select/*

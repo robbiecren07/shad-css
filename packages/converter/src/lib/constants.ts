@@ -104,3 +104,12 @@ export const NEEDS_BUTTON_STYLES = ['alert-dialog']
 
 // these components need the toggle-group.module.css style sheet
 export const NEEDS_TOGGLE_STYLES = ['toggle-group']
+
+// these components are not supported by the converter, they are manually converted
+export const EXCLUDE_COMPONENTS_FROM_CONVERTER = [
+  'calendar',
+  'carousel',
+  'chart',
+  'sonner',
+  'select',
+]
