@@ -3,8 +3,9 @@ export type ShadCssConfig = {
   baseColor: string
   outputDir: string
   componentsAlias: string
-  globalStylesheet: string
   iconLibrary: string
+  globalStylesheet: string
+  moduleStyleType: 'css' | 'scss'
 }
 
 export interface ComponentData {

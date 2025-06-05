@@ -3,50 +3,51 @@ import fs from 'node:fs'
 import path from 'node:path'
 import prettier from 'prettier'
 
-// Prettier parser mapping
-const parserByType: Record<string, prettier.BuiltInParserName> = {
-  tsx: 'typescript',
-  ts: 'typescript',
-  css: 'css',
-  scss: 'scss',
-}
-
 export async function addSingleComponent({ targetDir, config, files }: AddComponentOptions) {
   // Ensure targetDir exists
   fs.mkdirSync(targetDir, { recursive: true })
 
-  // Normalize the output dir for import replacement (strip 'src/' if present, ensure leading '@/')
-  let outputDirForImport = config.outputDir.replace(/^src\//, '').replace(/^\//, '')
-  if (!outputDirForImport.startsWith('components/')) {
-    // Edge case: just in case, fallback to config.outputDir as-is
-    outputDirForImport = config.outputDir.replace(/^src\//, '').replace(/^\//, '')
-  }
-  // Always ensure no trailing slash
-  outputDirForImport = outputDirForImport.replace(/\/$/, '')
+  // Normalize output dir for import path replacement (strip 'src/', no leading slash)
+  let outputDirForImport = config.outputDir
+    .replace(/^src\//, '')
+    .replace(/^\//, '')
+    .replace(/\/$/, '')
 
   for (const file of files) {
-    const filePath = path.join(targetDir, `${file.name}.${file.type}`)
-    let formattedContent = file.content
+    // Only handle .tsx and .css files in the "files" array
+    if (file.type === 'tsx') {
+      const filePath = path.join(targetDir, `${file.name}.tsx`)
+      let formattedContent = file.content
 
-    const parser = parserByType[file.type]
-
-    if (parser) {
       try {
-        formattedContent = await prettier.format(file.content, { parser })
+        formattedContent = await prettier.format(file.content, { parser: 'typescript' })
       } catch (err) {
-        // If formatting fails, fallback to raw content and warn
         console.warn(`⚠️ Prettier formatting failed for ${filePath}:`, err)
       }
-    }
 
-    // Replace any registry import path with the correct outputDir
-    if (file.type === 'tsx') {
+      // Replace registry imports with correct component alias
       formattedContent = formattedContent.replace(
         /@\/registry\/(?:default|new-york)\/ui\//g,
         `@/${outputDirForImport}/`
       )
+      fs.writeFileSync(filePath, formattedContent)
+      continue
     }
 
-    fs.writeFileSync(filePath, formattedContent)
+    // Only output style files if file.type === 'css'
+    if (file.type === 'css') {
+      // output the file with the correct extension from user's config
+      const filePath = path.join(targetDir, `${file.name}.${config.moduleStyleType}`)
+      let formattedContent = file.content
+
+      try {
+        formattedContent = await prettier.format(file.content, { parser: config.moduleStyleType })
+      } catch (err) {
+        console.warn(`⚠️ Prettier formatting failed for ${filePath}:`, err)
+      }
+
+      fs.writeFileSync(filePath, formattedContent)
+      continue
+    }
   }
 }

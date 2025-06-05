@@ -1,3 +1,4 @@
+import { DEV_DEPS } from '@/lib/contants'
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -26,37 +27,48 @@ export function installDependency(deps: string[] | string, packageManager: strin
   const toInstall = depArray.filter((dep) => !installedDeps || !installedDeps[dep])
 
   if (toInstall.length === 0) {
-    console.log('\nAll dependencies already installed. Skipping install dependencies step.')
+    //console.log('\nAll dependencies already installed. Skipping install dependencies step.')
     return
   }
 
-  let installCmd: string
-  let args: string[] = []
+  for (const dep of toInstall) {
+    let installCmd: string
+    let args: string[] = []
 
-  switch (packageManager) {
-    case 'npm':
-      installCmd = 'npm'
-      args = ['install', ...toInstall]
-      break
-    case 'yarn':
-      installCmd = 'yarn'
-      args = ['add', ...toInstall]
-      break
-    case 'pnpm':
-      installCmd = 'pnpm'
-      args = ['add', ...toInstall]
-      break
-    case 'bun':
-      installCmd = 'bun'
-      args = ['add', ...toInstall]
-      break
-    default:
-      throw new Error('Unsupported package manager: ' + packageManager)
-  }
+    // Check if this dep is a dev dependency
+    const isDevDep = DEV_DEPS.includes(dep)
 
-  console.log(`\nInstalling ${toInstall.join(', ')} using ${packageManager}...`)
-  const result = spawnSync(installCmd, args, { stdio: 'inherit' })
-  if (result.status !== 0) {
-    throw new Error(`Failed to install ${toInstall.join(', ')} with ${packageManager}`)
+    switch (packageManager) {
+      case 'npm':
+        installCmd = 'npm'
+        args = ['install', dep]
+        if (isDevDep) args.push('--save-dev')
+        break
+      case 'yarn':
+        installCmd = 'yarn'
+        args = ['add', dep]
+        if (isDevDep) args.push('--dev')
+        break
+      case 'pnpm':
+        installCmd = 'pnpm'
+        args = ['add', dep]
+        if (isDevDep) args.push('--save-dev')
+        break
+      case 'bun':
+        installCmd = 'bun'
+        args = ['add', dep]
+        if (isDevDep) args.push('--dev')
+        break
+      default:
+        throw new Error('Unsupported package manager: ' + packageManager)
+    }
+
+    const result = spawnSync(installCmd, args, { encoding: 'utf-8' })
+    if (result.status !== 0) {
+      console.warn(
+        `Failed to install ${dep} with ${packageManager}. Skipping... You may need to install it manually.`
+      )
+      // Optionally: throw or just warn and continue
+    }
   }
 }

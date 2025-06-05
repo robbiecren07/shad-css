@@ -4,7 +4,7 @@ import path from 'node:path'
 import { Command } from 'commander'
 import prompts from 'prompts'
 import fg from 'fast-glob'
-import { getThemeCssVars, injectCssVarsSmart } from '@/utils/themeVars'
+import { injectThemeStyles } from '@/utils/injectThemeStyles'
 import { detectPackageManager } from '@/utils/helpers'
 import { installDependency } from '@/utils/installDependency'
 import { createCnHelper } from '@/utils/createCnHelper'
@@ -50,9 +50,26 @@ export async function runInit(): Promise<ShadCssConfig> {
     })
 
     let globalStylesheet: string
+    let moduleStyleType: 'css' | 'scss'
+    let addSassHelpers = false
 
     if (globalStyles.length === 1) {
       globalStylesheet = globalStyles[0]
+      moduleStyleType = globalStylesheet.endsWith('.scss') ? 'scss' : 'css'
+
+      // If existing globals is scss, prompt for helper
+      if (moduleStyleType === 'scss') {
+        const { wantSassHelpers } = await prompts({
+          type: 'toggle',
+          name: 'wantSassHelpers',
+          message:
+            'Would you like to add the SASS colorVar() helper function to your globals.scss?',
+          initial: true,
+          active: 'yes',
+          inactive: 'no',
+        })
+        addSassHelpers = wantSassHelpers
+      }
     } else if (globalStyles.length > 1) {
       const { chosen } = await prompts({
         type: 'select',
@@ -61,11 +78,24 @@ export async function runInit(): Promise<ShadCssConfig> {
         choices: globalStyles.map((file) => ({ title: file, value: file })),
       })
       globalStylesheet = chosen
+      moduleStyleType = globalStylesheet.endsWith('.scss') ? 'scss' : 'css'
+
+      if (moduleStyleType === 'scss') {
+        const { wantSassHelpers } = await prompts({
+          type: 'toggle',
+          name: 'wantSassHelpers',
+          message:
+            'Would you like to add the SASS colorVar() helper function to your globals.scss?',
+          initial: true,
+          active: 'yes',
+          inactive: 'no',
+        })
+        addSassHelpers = wantSassHelpers
+      }
     } else {
       // Preferred creation order
       const candidateDirs = [path.join('src', 'app'), 'app', 'src', '.']
       let globalDir = '.'
-      let globalPath = ''
 
       for (const dir of candidateDirs) {
         if (fs.existsSync(dir) && fs.lstatSync(dir).isDirectory()) {
@@ -73,27 +103,40 @@ export async function runInit(): Promise<ShadCssConfig> {
           break
         }
       }
-      globalPath = path.join(globalDir, 'globals.css')
 
-      const { createGlobal } = await prompts({
-        type: 'toggle',
-        name: 'createGlobal',
-        message: `No globals.css or globals.scss found. Create one at "${globalPath}"?`,
-        initial: true,
-        active: 'yes',
-        inactive: 'no',
+      // PROMPT: Which type should we create?
+      const { stylesheetType } = await prompts({
+        type: 'select',
+        name: 'stylesheetType',
+        message: 'No globals.css or globals.scss found. Which module type do you want to use?',
+        choices: [
+          { title: 'CSS (.css)', value: 'css' },
+          { title: 'SCSS (.scss)', value: 'scss' },
+        ],
+        initial: 0,
       })
 
-      if (!createGlobal) {
-        console.error(
-          '\n❌ Error: A global stylesheet is required to set base colors. Please add a globals.css or globals.scss to your project and re-run this command.'
-        )
-        process.exit(1)
-      }
+      moduleStyleType = stylesheetType
+      const globalPath = path.join(globalDir, `globals.${moduleStyleType}`)
 
-      fs.writeFileSync(globalPath, '/* shad-css generated global stylesheet */\n')
+      let wantSassHelpers = false
+      if (moduleStyleType === 'scss') {
+        const res = await prompts({
+          type: 'toggle',
+          name: 'wantSassHelpers',
+          message:
+            'Would you like to add the SASS colorVar() helper function to your globals.scss?',
+          initial: true,
+          active: 'yes',
+          inactive: 'no',
+        })
+        wantSassHelpers = res.wantSassHelpers
+      }
+      addSassHelpers = wantSassHelpers
+
+      const initialContent = '/* shad-css generated global stylesheet */\n'
+      fs.writeFileSync(globalPath, initialContent)
       globalStylesheet = globalPath
-      console.log(`Created ${globalPath}`)
     }
 
     // Ask questions
@@ -136,13 +179,14 @@ export async function runInit(): Promise<ShadCssConfig> {
     ])
 
     // Create configuration using remaining options
-    const config = {
+    const config: ShadCssConfig = {
       theme: options.theme,
       baseColor: options.baseColor,
       outputDir: options.outputDir,
       componentsAlias: options.componentsAlias,
       iconLibrary: options.theme === 'default' ? 'lucide-react' : 'react-icons',
       globalStylesheet,
+      moduleStyleType,
     }
 
     // Create output directory
@@ -150,15 +194,18 @@ export async function runInit(): Promise<ShadCssConfig> {
     fs.mkdirSync(outputDir, { recursive: true })
 
     // Inject base colors into global stylesheet
-    const cssVars = getThemeCssVars(config.baseColor)
-    injectCssVarsSmart(config.globalStylesheet, cssVars)
+    injectThemeStyles(config, addSassHelpers)
 
     // Create json configuration file
     fs.writeFileSync(path.join(process.cwd(), 'shad-css.json'), JSON.stringify(config, null, 2))
 
     // Install required dependencies
     const packageManager = detectPackageManager()
-    let initDep = ['classnames', 'class-variance-authority']
+    let initDep = [
+      'classnames',
+      'class-variance-authority',
+      moduleStyleType === 'scss' ? 'sass' : '',
+    ]
 
     // Install the correct icon library
     if (config.iconLibrary === 'lucide-react') {
