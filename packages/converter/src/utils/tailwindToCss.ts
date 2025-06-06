@@ -18,7 +18,7 @@ import { normalizePostCssOutput } from './helpers'
  * @param cssInput A string containing the CSS input that may include Tailwind CSS classes.
  * @returns A Promise that resolves to a string containing the processed CSS output.
  */
-export async function tailwindToCss(cssInput: string): Promise<string> {
+export async function tailwindToCss(componentName: string, cssInput: string): Promise<string> {
   // Process CSS through PostCSS pipeline
   const result = await postcss([
     tailwindcss({
@@ -44,7 +44,15 @@ export async function tailwindToCss(cssInput: string): Promise<string> {
   //const cleanedCss = await cleanTailwindVars(result.css)
 
   // Normalize CSS formatting
-  const compactCss = normalizePostCssOutput(result.css)
+  let compactCss = normalizePostCssOutput(result.css)
+
+  // Component 'navigation-menu' needs the group animation manually adjusted
+  if (componentName === 'navigation-menu') {
+    compactCss = compactCss.replace(
+      /\.group\[data-state="open"\] \.navigationMenuTriggerChevronDown/g,
+      '.navigationMenuBase[data-state="open"] .navigationMenuTriggerChevronDown'
+    )
+  }
 
   return compactCss
 }

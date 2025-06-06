@@ -100,7 +100,7 @@ export async function convertComponent(
 
   // Compile CSS with Tailwind utilities.
   const rawCss = cssSnippets.join('\n\n')
-  const compiledCss = await tailwindToCss(rawCss)
+  const compiledCss = await tailwindToCss(componentName, rawCss)
 
   // Transform TSX: replace className values and cva() references.
   const printer = ts.createPrinter()

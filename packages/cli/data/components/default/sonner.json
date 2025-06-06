@@ -1,0 +1,19 @@
+{
+  "name": "sonner",
+  "dependencies": [
+    "sonner",
+    "next-themes"
+  ],
+  "files": [
+    {
+      "name": "sonner.tsx",
+      "content": "\"use client\";\n\nimport { useTheme } from \"next-themes\";\nimport { Toaster as Sonner } from \"sonner\";\nimport { cn } from \"@/lib/utils\";\nimport styles from \"./sooner.module.css\";\n\ntype ToasterProps = React.ComponentProps<typeof Sonner>;\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme();\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster\"\n      toastOptions={{\n        classNames: {\n          toast: cn('toast', styles.toast),\n          description: styles.toastDescription,\n          actionButton: styles.toastActionButton,\n          cancelButton: styles.toastCancelButton,\n        },\n      }}\n      {...props}\n    />\n  )\n};\n\nexport { Toaster };\n"
+    },
+    {
+      "type": "css",
+      "name": "sonner.module",
+      "content": ".toast {\n  background: hsl(var(--background));\n  color: hsl(var(--foreground));\n  border: 1px solid hsl(var(--border));\n  box-shadow:\n    0 4px 24px 0 rgba(0, 0, 0, 0.13),\n    0 1.5px 4px 0 rgba(0, 0, 0, 0.09);\n  border-radius: var(--radius);\n}\n\n.toastDescription {\n  color: hsl(var(--muted-foreground));\n}\n\n.toastActionButton {\n  background: hsl(var(--primary));\n  color: hsl(var(--primary-foreground));\n  border: none;\n  border-radius: var(--radius);\n  cursor: pointer;\n}\n\n.toastCancelButton {\n  background: hsl(var(--muted));\n  color: hsl(var(--muted-foreground));\n  border: none;\n  border-radius: var(--radius);\n  cursor: pointer;\n}\n"
+    }
+  ],
+  "type": "components:ui"
+}
