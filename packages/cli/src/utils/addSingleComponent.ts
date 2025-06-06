@@ -30,12 +30,18 @@ export async function addSingleComponent({ targetDir, config, files }: AddCompon
         /@\/registry\/(?:default|new-york)\/ui\//g,
         `@/${outputDirForImport}/`
       )
+
+      // Replace CSS imports with SCSS imports if moduleStyleType is scss
+      if (config.moduleStyleType === 'scss') {
+        formattedContent = formattedContent.replace(/module\.css(['"])/g, 'module.scss$1')
+      }
+
       fs.writeFileSync(filePath, formattedContent)
       continue
     }
 
-    // Only output style files if file.type === 'css'
-    if (file.type === 'css') {
+    // Only output the css or scss file depending on user's config
+    if (file.type === config.moduleStyleType) {
       // output the file with the correct extension from user's config
       const filePath = path.join(targetDir, `${file.name}.${config.moduleStyleType}`)
       let formattedContent = file.content
