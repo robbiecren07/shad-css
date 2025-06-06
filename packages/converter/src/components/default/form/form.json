@@ -22,6 +22,11 @@
       "type": "css",
       "name": "form.module",
       "content": ".id > :not([hidden]) ~ :not([hidden]) {\n  --tw-space-y-reverse: 0;\n  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));\n  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));\n}\n.formLabelError {\n  color: hsl(var(--destructive));\n}\n.formDescription {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  color: hsl(var(--muted-foreground));\n}\n.body {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  font-weight: 500;\n  color: hsl(var(--destructive));\n}\n"
+    },
+    {
+      "type": "scss",
+      "name": "form.module",
+      "content": ".id > :not([hidden]) ~ :not([hidden]) {\n  --tw-space-y-reverse: 0;\n  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));\n  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));\n}\n.formLabelError {\n  color: hsl(var(--destructive));\n}\n.formDescription {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  color: hsl(var(--muted-foreground));\n}\n.body {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  font-weight: 500;\n  color: hsl(var(--destructive));\n}\n"
     }
   ]
 }

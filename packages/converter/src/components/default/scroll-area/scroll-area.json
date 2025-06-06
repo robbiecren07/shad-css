@@ -15,6 +15,11 @@
       "type": "css",
       "name": "scroll-area.module",
       "content": ".scrollArea {\n  position: relative;\n  overflow: hidden;\n}\n.scrollAreaViewport {\n  height: 100%;\n  width: 100%;\n  border-radius: inherit;\n}\n.scrollBar {\n  display: flex;\n  touch-action: none;\n  user-select: none;\n  transition-property:\n    color, background-color, border-color, text-decoration-color, fill, stroke;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n  height: 100%;\n  width: 0.625rem;\n  border-left-width: 1px;\n  border-left-color: transparent;\n  height: 0.625rem;\n  flex-direction: column;\n  border-top-width: 1px;\n  border-top-color: transparent;\n  padding: 1px;\n}\n.scrollBarScrollAreaThumb {\n  position: relative;\n  flex: 1 1 0%;\n  border-radius: 9999px;\n  background-color: hsl(var(--border));\n}\n"
+    },
+    {
+      "type": "scss",
+      "name": "scroll-area.module",
+      "content": ".scrollArea {\n  position: relative;\n  overflow: hidden;\n}\n.scrollAreaViewport {\n  height: 100%;\n  width: 100%;\n  border-radius: inherit;\n}\n.scrollBar {\n  display: flex;\n  touch-action: none;\n  user-select: none;\n  transition-property:\n    color, background-color, border-color, text-decoration-color, fill, stroke;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n  height: 100%;\n  width: 0.625rem;\n  border-left-width: 1px;\n  border-left-color: transparent;\n  height: 0.625rem;\n  flex-direction: column;\n  border-top-width: 1px;\n  border-top-color: transparent;\n  padding: 1px;\n}\n.scrollBarScrollAreaThumb {\n  position: relative;\n  flex: 1 1 0%;\n  border-radius: 9999px;\n  background-color: hsl(var(--border));\n}\n"
     }
   ]
 }

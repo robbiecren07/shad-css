@@ -1,5 +1,5 @@
 import ts from 'typescript'
-import { capitalize, toCamelCase } from '../helpers'
+import { buildStylesKey, toCamelCase } from '../helpers'
 
 /**
  * TypeScript AST transformer that rewrites cva() calls,
@@ -54,6 +54,7 @@ export function transformCvaVariants(componentName: string) {
                   ts.isIdentifier(v.name) &&
                   ts.isObjectLiteralExpression(v.initializer)
                 ) {
+                  const variantKey = v.name.text
                   // For each variant value (e.g. default, destructive)
                   const newVariantValues = v.initializer.properties.map((val) => {
                     if (
@@ -61,8 +62,8 @@ export function transformCvaVariants(componentName: string) {
                       ts.isIdentifier(val.name) &&
                       ts.isStringLiteral(val.initializer)
                     ) {
-                      // Convert: 'default': 'tw' → 'default': styles.buttonDefault
-                      const stylesKey = componentName.toLowerCase() + capitalize(val.name.text)
+                      const variantValue = val.name.text
+                      const stylesKey = buildStylesKey(componentName, variantKey, variantValue)
                       return ts.factory.updatePropertyAssignment(
                         val,
                         val.name,

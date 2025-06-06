@@ -15,6 +15,11 @@
       "type": "css",
       "name": "separator.module",
       "content": ".separator {\n  flex-shrink: 0;\n  background-color: hsl(var(--border));\n  height: 1px;\n  width: 100%;\n  height: 100%;\n  width: 1px;\n}\n"
+    },
+    {
+      "type": "scss",
+      "name": "separator.module",
+      "content": ".separator {\n  flex-shrink: 0;\n  background-color: hsl(var(--border));\n  height: 1px;\n  width: 100%;\n  height: 100%;\n  width: 1px;\n}\n"
     }
   ]
 }

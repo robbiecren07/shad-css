@@ -15,6 +15,11 @@
       "type": "css",
       "name": "aspect-ratio.module",
       "content": ""
+    },
+    {
+      "type": "scss",
+      "name": "aspect-ratio.module",
+      "content": ""
     }
   ]
 }

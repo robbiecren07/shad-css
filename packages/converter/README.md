@@ -108,3 +108,17 @@ npm install
 # Build the package
 npm run build
 ```
+
+## Notes
+
+- Currently the converter will skip adding Tailwind class names like `peer` or `group` in `convertComponent.ts` on step 3,
+which is `const safeClassName = removeForbiddenApplyUtils(className)`. We get an error in `tailwindToCss.ts` when using `postcss`,
+it does not like that we add those tailwind classes to `@apply` since its a custom tailwind css/class name.
+
+**Components That Need Manual Converting**
+
+- calendar            # ⚠️ manually converted
+- carousel            # ⚠️ manually converted
+- chart               # ⚠️ manually converted
+- select              # ⚠️ manually converted
+- sonner              # ⚠️ manually converted

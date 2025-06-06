@@ -15,6 +15,11 @@
       "type": "css",
       "name": "collapsible.module",
       "content": ""
+    },
+    {
+      "type": "scss",
+      "name": "collapsible.module",
+      "content": ""
     }
   ]
 }

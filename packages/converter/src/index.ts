@@ -94,6 +94,11 @@ async function convert(componentName: string, style: string) {
     const formattedCss = await prettier.format(css, { parser: 'css' })
     fs.writeFileSync(cssPath, formattedCss)
 
+    // Write the formatted SCSS Module file
+    const scssPath = path.join(componentDir, `${componentName}.module.scss`)
+    const formattedScss = await prettier.format(css, { parser: 'scss' })
+    fs.writeFileSync(scssPath, formattedScss)
+
     // Write the JSON metadata/code snapshot
     const jsonPath = path.join(componentDir, `${componentName}.json`)
     const jsonContent = await createJsonFile(
@@ -101,7 +106,8 @@ async function convert(componentName: string, style: string) {
       componentData.dependencies,
       componentData.registryDependencies,
       formattedTsx,
-      formattedCss
+      formattedCss,
+      formattedScss
     )
     fs.writeFileSync(jsonPath, jsonContent.json)
 

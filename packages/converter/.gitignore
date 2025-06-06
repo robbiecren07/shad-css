@@ -3,8 +3,10 @@ dist/
 
 src/components/default/*/**.tsx
 src/components/default/*/**.css
+src/components/default/*/**.scss
 src/components/new-york/*/**.tsx
 src/components/new-york/*/**.css
+src/components/new-york/*/**.scss
 
 !src/components/default/calendar/*
 !src/components/new-york/calendar/*

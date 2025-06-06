@@ -20,7 +20,8 @@ export async function createJsonFile(
   dependencies: string[] | undefined,
   registryDependencies: string[] | undefined,
   tsxContent: string,
-  cssContent: string
+  cssContent: string,
+  scssContent: string
 ): Promise<{ json: string }> {
   // Build the component JSON structure
   const jsonData = {
@@ -41,6 +42,11 @@ export async function createJsonFile(
         type: 'css',
         name: `${componentName}.module`,
         content: cssContent,
+      },
+      {
+        type: 'scss',
+        name: `${componentName}.module`,
+        content: scssContent,
       },
     ],
   }

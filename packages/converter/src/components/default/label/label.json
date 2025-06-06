@@ -15,6 +15,11 @@
       "type": "css",
       "name": "label.module",
       "content": ".labelBase {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  font-weight: 500;\n  line-height: 1;\n}\n.peer:disabled ~ .labelBase {\n  cursor: not-allowed;\n  opacity: 0.7;\n}\n"
+    },
+    {
+      "type": "scss",
+      "name": "label.module",
+      "content": ".labelBase {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n  font-weight: 500;\n  line-height: 1;\n}\n.peer:disabled ~ .labelBase {\n  cursor: not-allowed;\n  opacity: 0.7;\n}\n"
     }
   ]
 }

@@ -125,8 +125,7 @@ export async function convertComponent(
     finalTsx = injectStylesImport(
       transformedTsx,
       `./${componentName}.module.css`,
-      `${componentName}.tsx`,
-      componentName
+      `${componentName}.tsx`
     )
   }
 

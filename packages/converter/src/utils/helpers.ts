@@ -110,3 +110,15 @@ export function removeForbiddenApplyUtils(classList: string): string {
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
+/**
+ * Helper to build the correct CSS module key for a variant value.
+ */
+export function buildStylesKey(componentName: string, variantKey: string, variantValue: string) {
+  if (variantKey === 'variant') {
+    // e.g. buttonDefault, buttonDestructive, etc.
+    return componentName.toLowerCase() + capitalize(variantValue)
+  }
+  // e.g. buttonSizeDefault, buttonSizeSm, etc.
+  return componentName.toLowerCase() + capitalize(variantKey) + capitalize(variantValue)
+}

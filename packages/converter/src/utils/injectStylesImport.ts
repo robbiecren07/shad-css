@@ -1,4 +1,3 @@
-import { NEEDS_BUTTON_STYLES, NEEDS_TOGGLE_STYLES } from '@/lib/constants'
 import ts from 'typescript'
 
 /**
@@ -16,9 +15,8 @@ import ts from 'typescript'
  */
 export function injectStylesImport(
   sourceText: string,
-  modulePath: string = './Component.module.css',
-  fileName: string = 'index.tsx',
-  componentName?: string
+  modulePath: string,
+  fileName: string = 'index.tsx'
 ): string {
   // Parse source text into a TypeScript AST
   const sourceFile = ts.createSourceFile(
@@ -38,25 +36,6 @@ export function injectStylesImport(
     ts.factory.createStringLiteral(modulePath)
   )
 
-  // Optionally create supporting imports only if needed
-  let buttonStylesImport: ts.ImportDeclaration | undefined
-  let toggleStylesImport: ts.ImportDeclaration | undefined
-
-  if (componentName && NEEDS_BUTTON_STYLES.includes(componentName)) {
-    buttonStylesImport = ts.factory.createImportDeclaration(
-      undefined,
-      ts.factory.createImportClause(false, ts.factory.createIdentifier('buttonStyles'), undefined),
-      ts.factory.createStringLiteral('@/registry/new-york/ui/button/button.module.css')
-    )
-  }
-  if (componentName && NEEDS_TOGGLE_STYLES.includes(componentName)) {
-    toggleStylesImport = ts.factory.createImportDeclaration(
-      undefined,
-      ts.factory.createImportClause(false, ts.factory.createIdentifier('toggleStyles'), undefined),
-      ts.factory.createStringLiteral('@/registry/new-york/ui/toggle/toggle.module.css')
-    )
-  }
-
   // We'll collect statements here, inserting our imports at the right spot
   const statements: ts.Statement[] = []
   let inserted = false
@@ -75,8 +54,6 @@ export function injectStylesImport(
     // Inject imports after existing imports, before any other statement
     if (!inserted && !ts.isImportDeclaration(stmt)) {
       statements.push(stylesImport)
-      if (buttonStylesImport) statements.push(buttonStylesImport)
-      if (toggleStylesImport) statements.push(toggleStylesImport)
       inserted = true
     }
 
@@ -86,8 +63,6 @@ export function injectStylesImport(
   // If all statements were imports or empty, insert our imports at the end
   if (!inserted) {
     statements.push(stylesImport)
-    if (buttonStylesImport) statements.push(buttonStylesImport)
-    if (toggleStylesImport) statements.push(toggleStylesImport)
   }
 
   // Print the updated AST back to source text
