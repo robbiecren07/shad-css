@@ -6,7 +6,7 @@ import { transformCvaVariants } from './transforms/transformCvaVariants'
 import { transformClassNames } from './transforms/transformClassNames'
 import { formatClassName } from './formatters'
 import { injectStylesImport } from './injectStylesImport'
-import { capitalize, removeForbiddenApplyUtils, toCamelCase } from './helpers'
+import { buildStylesKey, removeForbiddenApplyUtils, toCamelCase } from './helpers'
 import { EXCLUDE_STYLESHEET_INJECTION, FORBIDDEN_CLASS_NAMES } from '@/lib/constants'
 
 /**
@@ -58,7 +58,7 @@ export async function convertComponent(
         for (const variantValue in cva.variants[variantKey]) {
           const tailwindString = cva.variants[variantKey][variantValue]
           const safeVariant = removeForbiddenApplyUtils(tailwindString)
-          const cssClass = toCamelCase(`${componentName}${capitalize(variantValue)}`)
+          const cssClass = buildStylesKey(componentName, variantKey, variantValue)
           cssSnippets.push(`.${cssClass} {\n  @apply ${safeVariant};\n}`)
           classReplacementMap[tailwindString] = `styles.${cssClass}`
         }
