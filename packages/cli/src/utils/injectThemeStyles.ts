@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import prettier from 'prettier'
-import { BASE_CSS_STYLES, BASE_SASS_STYLES, SHAD_SASS_HELPERS } from '@/lib/contants'
+import { BASE_CSS_STYLES, BASE_SASS_STYLES, NORMALIZE_CSS, SHAD_SASS_HELPERS } from '@/lib/contants'
 import { ShadCssConfig } from '@/types'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -81,6 +81,7 @@ export function formatCssVarsForGlobalStylesheet(
       ? `@use '../scss/shad-helpers' as *;
     `
       : '',
+    NORMALIZE_CSS,
     ':root {',
     formatVars(cssVars.light),
     '--radius: 0.5rem;',
