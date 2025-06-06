@@ -13,6 +13,11 @@
       "type": "css",
       "name": "sonner.module",
       "content": ".toast {\n  background: hsl(var(--background));\n  color: hsl(var(--foreground));\n  border: 1px solid hsl(var(--border));\n  box-shadow:\n    0 4px 24px 0 rgba(0, 0, 0, 0.13),\n    0 1.5px 4px 0 rgba(0, 0, 0, 0.09);\n  border-radius: var(--radius);\n}\n\n.toastDescription {\n  color: hsl(var(--muted-foreground));\n}\n\n.toastActionButton {\n  background: hsl(var(--primary));\n  color: hsl(var(--primary-foreground));\n  border: none;\n  border-radius: var(--radius);\n  cursor: pointer;\n}\n\n.toastCancelButton {\n  background: hsl(var(--muted));\n  color: hsl(var(--muted-foreground));\n  border: none;\n  border-radius: var(--radius);\n  cursor: pointer;\n}\n"
+    },
+    {
+      "type": "scss",
+      "name": "sonner.module",
+      "content": ".toast {\n  background: hsl(var(--background));\n  color: hsl(var(--foreground));\n  border: 1px solid hsl(var(--border));\n  box-shadow:\n    0 4px 24px 0 rgba(0, 0, 0, 0.13),\n    0 1.5px 4px 0 rgba(0, 0, 0, 0.09);\n  border-radius: var(--radius);\n}\n\n.toastDescription {\n  color: hsl(var(--muted-foreground));\n}\n\n.toastActionButton {\n  background: hsl(var(--primary));\n  color: hsl(var(--primary-foreground));\n  border: none;\n  border-radius: var(--radius);\n  cursor: pointer;\n}\n\n.toastCancelButton {\n  background: hsl(var(--muted));\n  color: hsl(var(--muted-foreground));\n  border: none;\n  border-radius: var(--radius);\n  cursor: pointer;\n}\n"
     }
   ],
   "type": "components:ui"

@@ -13,6 +13,11 @@
       "type": "css",
       "name": "skeleton.module",
       "content": ".componentDiv {\n  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n  border-radius: calc(var(--radius) - 2px);\n  background-color: hsl(var(--primary) / 0.1);\n}\n@keyframes pulse {\n  50% {\n    opacity: 0.5;\n  }\n}\n"
+    },
+    {
+      "type": "scss",
+      "name": "skeleton.module",
+      "content": ".componentDiv {\n  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n  border-radius: calc(var(--radius) - 2px);\n  background-color: hsl(var(--primary) / 0.1);\n}\n@keyframes pulse {\n  50% {\n    opacity: 0.5;\n  }\n}\n"
     }
   ]
 }
