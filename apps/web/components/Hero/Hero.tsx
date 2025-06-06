@@ -17,10 +17,10 @@ export default function Hero({ data }: Props) {
             <Zap className={styles.hero_badgeIcon} />
             Built for the community
           </Badge>
-          <h2 className={styles.hero_title}>Swap Tailwind for CSS Modules—Effortlessly</h2>
+          <h2 className={styles.hero_title}>Swap Tailwind for CSS/SCSS Modules—Effortlessly</h2>
           <p className={styles.hero_text}>
-            Skip the manual conversion. Instantly add Shadcn/ui components styled with CSS Modules
-            with a single CLI command. Get clean, production-ready React components—
+            Skip the manual conversion. Instantly add Shadcn/ui components styled with CSS or SCSS
+            Modules with a single CLI command. Get clean, production-ready React components—
             <strong>no Tailwind setup needed</strong>.
           </p>
         </div>

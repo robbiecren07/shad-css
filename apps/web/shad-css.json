@@ -1,8 +1,9 @@
 {
   "theme": "default",
-  "baseColor": "neutral",
+  "baseColor": "slate",
   "outputDir": "components/ui",
   "componentsAlias": "@/*",
   "iconLibrary": "lucide-react",
-  "globalStylesheet": "app/globals.css"
+  "globalStylesheet": "app/globals.scss",
+  "moduleStyleType": "scss"
 }

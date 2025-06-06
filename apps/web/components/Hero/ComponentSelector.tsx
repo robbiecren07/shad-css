@@ -4,7 +4,7 @@ import type { ComponentItem } from '@/types'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import {
   Command,
   CommandEmpty,
@@ -46,7 +46,6 @@ export default function ComponentSelector({ data }: Props) {
               >
                 {selectedComponent ? (
                   <span className={styles.selector_comboboxValue}>
-                    <Palette className={styles.selector_comboboxIcon} />
                     {capitalize(selectedComponent.name)}
                   </span>
                 ) : (
@@ -90,25 +89,48 @@ export default function ComponentSelector({ data }: Props) {
       {selectedComponent && (
         <Card className={styles.selectedCard}>
           <CardHeader className={styles.selectedCard_header}>
-            <div className={styles.selectedCard_title}>
-              <Palette className={styles.selectedCard_icon} />
-              {capitalize(selectedComponent.name)}
-            </div>
-            <Badge />
+            <div className={styles.selectedCard_title}>{capitalize(selectedComponent.name)}</div>
           </CardHeader>
           <CardContent className={styles.selectedCard_content}>
             <div className="space-y-4">
               <div>
-                <h4 className={styles.selectedCard_featuresTitle}>Features after conversion:</h4>
+                <h4 className={styles.selectedCard_featuresTitle}>Installation</h4>
+                <div className={styles.selectedCard_code_block}>
+                  <div className={styles.selectedCard_code_header}>
+                    <ToggleGroup type="single">
+                      <ToggleGroupItem size="sm" value="npm">
+                        npm
+                      </ToggleGroupItem>
+                      <ToggleGroupItem size="sm" value="pnpm">
+                        pnpm
+                      </ToggleGroupItem>
+                      <ToggleGroupItem size="sm" value="yarn">
+                        yarn
+                      </ToggleGroupItem>
+                      <ToggleGroupItem size="sm" value="bun">
+                        bun
+                      </ToggleGroupItem>
+                    </ToggleGroup>
+                  </div>
+                  <code className={styles.selectedCard_code_text}>
+                    bunx --bun shadcn@latest add toggle-group
+                  </code>
+                </div>
               </div>
 
               <div className={styles.selectedCard_action}>
-                <Link href={`/docs/${selectedComponent.name}`}>
-                  <Button className={styles.selectedCard_docBtn}>
+                <Button className={styles.selectedCard_docBtn} asChild>
+                  <Link href={`/docs/${selectedComponent.name}`} target="_self">
+                    View Our Docs
+                  </Link>
+                </Button>
+
+                <Button className={styles.selectedCard_docBtn} asChild>
+                  <Link href={`/docs/${selectedComponent.name}`} target="_blank" rel="nofollow">
                     <ExternalLink className={styles.selectedCard_docIcon} />
-                    View Documentation
-                  </Button>
-                </Link>
+                    View Shadcn's Docs
+                  </Link>
+                </Button>
               </div>
             </div>
           </CardContent>

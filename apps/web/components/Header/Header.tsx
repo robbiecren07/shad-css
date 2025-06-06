@@ -8,15 +8,15 @@ export default function Header() {
     <header className={styles.header}>
       <nav className={styles.header_nav}>
         <div className={styles.header_nav_inner}>
-          <div className={styles.header_nav_content}>
-            <div className={styles.header_logoGroup}>
-              <Logo />
-              <span className={styles.header_logo}>shad-css</span>
-            </div>
-            <Link href="/docs">
-              <Button variant="ghost">Documentation</Button>
-            </Link>
+          <div className={styles.header_group}>
+            <Logo />
+            <span className={styles.header_group_logo}>shad-css</span>
           </div>
+          <Link href="/docs">
+            <Button variant="ghost" size="sm">
+              Documentation
+            </Button>
+          </Link>
         </div>
       </nav>
     </header>

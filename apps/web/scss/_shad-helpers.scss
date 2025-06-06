@@ -1,0 +1,6 @@
+// _shad-helpers.scss
+/// SASS helper for shad-css color vars
+@function colorVar($name) {
+  @return hsl(var(--#{$name}));
+}
+// Usage: color: colorVar('foreground');

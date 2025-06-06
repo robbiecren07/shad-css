@@ -1,3 +1,5 @@
+@use "@/scss/shad-helpers" as *;
+
 .hero {
   position: relative;
   width: 100%;
@@ -46,7 +48,7 @@
   }
 
   &_text {
-    color: hsl(var(--accent));
+    color: hsla(var(--muted-foreground));
     font-size: 1.25rem;
     max-width: 42rem;
     margin: 0 auto;
@@ -78,6 +80,7 @@
       justify-content: space-between;
       height: 3rem;
       text-align: left;
+      border: 1px solid colorVar('border');
     }
 
     .selector_comboboxValue {
@@ -121,34 +124,25 @@
     justify-content: space-between;
 
     .selectedCard_title {
-      display: flex;
-      align-items: center;
-
-      .selectedCard_icon {
-        width: 1.25rem;
-        height: 1.25rem;
-        margin-right: 0.5rem;
-        color: #2563eb;
-      }
+      font-size: 1.5rem;
+      font-weight: 600;
     }
   }
 
   .selectedCard_content {
     .selectedCard_featuresTitle {
-      font-weight: 600;
       margin-bottom: 0.5rem;
     }
 
     .selectedCard_action {
-      padding-top: 1rem;
-      border-top: 1px solid #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding-top: 1.5rem;
 
       .selectedCard_docBtn {
-        width: 100%;
-
-        @media (min-width: 640px) {
-          width: auto;
-        }
+        width: max-content;
 
         .selectedCard_docIcon {
           width: 1rem;
@@ -156,6 +150,29 @@
           margin-right: 0.5rem;
         }
       }
+    }
+  }
+
+  &_code {
+    &_block {
+      display: grid;
+      width: 100%;
+      padding: 0.25rem;
+      border-radius: var(--radius);
+      background-color: hsl(var(--background));
+      border: 1px solid hsl(var(--border));
+    }
+
+    &_header {
+      display: inline-flex;
+      width: 100%;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid hsl(var(--border));
+    }
+
+    &_text {
+      padding: 0.75rem;
+      font-size: 0.85rem;
     }
   }
 }

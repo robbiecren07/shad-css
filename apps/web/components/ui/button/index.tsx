@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import styles from "./button.module.css";
+import styles from "./button.module.scss";
 
 const buttonVariants = cva(styles.buttonBase, {
   variants: {
@@ -15,10 +15,10 @@ const buttonVariants = cva(styles.buttonBase, {
       link: styles.buttonLink,
     },
     size: {
-      default: styles.buttonDefault,
-      sm: styles.buttonSm,
-      lg: styles.buttonLg,
-      icon: styles.buttonIcon,
+      default: styles.buttonSizeDefault,
+      sm: styles.buttonSizeSm,
+      lg: styles.buttonSizeLg,
+      icon: styles.buttonSizeIcon,
     },
   },
   defaultVariants: {

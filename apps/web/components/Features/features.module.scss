@@ -23,6 +23,7 @@
     }
 
     &_text {
+      color: hsla(var(--muted-foreground));
       max-width: 42rem;
       margin: 0 auto;
     }
@@ -35,26 +36,15 @@
     @media (min-width: 768px) {
       grid-template-columns: repeat(3, 1fr);
     }
-
-    &_cardIcon {
-      width: 2rem;
-      height: 2rem;
-      margin-bottom: 0.5rem;
-
-      &--blue {
-        color: #2563EB;
-      }
-
-      &--green {
-        color: #16A34A;
-      }
-
-      &--purple {
-        color: #9333EA;
-      }
-    }
-
-    .section_cardText {}
   }
 
+  &_cardHeader {
+    gap: 6px;
+  }
+
+  &_cardIcon {
+    width: 2rem;
+    height: 2rem;
+    color: hsla(var(--muted-foreground));
+  }
 }

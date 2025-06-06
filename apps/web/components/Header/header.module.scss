@@ -10,36 +10,32 @@
     width: 100%;
 
     &_inner {
-      max-width: 80rem;
-      padding: 0 1rem;
-      margin: 0 auto;
-
-      @media (min-width: 1024px) {
-        padding: 0 2rem;
-      }
-    }
-
-    &_content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 4rem;
+      max-width: 80rem;
+      padding: 0.5rem 1rem;
+      margin: 0 auto;
+
+      @media (min-width: 1024px) {
+        padding: 0.75rem 2rem;
+      }
     }
   }
 
-  &_logoGroup {
+  &_group {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+
+    &_logo {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
 
     svg {
       width: 1.75rem;
       height: 1.75rem;
     }
-  }
-
-  &_logo {
-    font-size: 1.25rem;
-    font-weight: bold;
   }
 }

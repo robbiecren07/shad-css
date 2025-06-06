@@ -15,10 +15,8 @@ export default function Features() {
 
         <div className={styles.section_grid}>
           <Card>
-            <CardHeader>
-              <Code2
-                className={`${styles.section_grid_cardIcon} ${styles['section_grid_cardIcon--blue']}`}
-              />
+            <CardHeader className={styles.section_cardHeader}>
+              <Code2 className={styles.section_cardIcon} />
               <CardTitle>Modular & Maintainable</CardTitle>
             </CardHeader>
             <CardContent>
@@ -29,10 +27,8 @@ export default function Features() {
           </Card>
 
           <Card>
-            <CardHeader>
-              <Zap
-                className={`${styles.section_cardIcon} ${styles['section_grid_cardIcon--green']}`}
-              />
+            <CardHeader className={styles.section_cardHeader}>
+              <Zap className={styles.section_cardIcon} />
               <CardTitle>Blazing Fast</CardTitle>
             </CardHeader>
             <CardContent>
@@ -43,10 +39,8 @@ export default function Features() {
           </Card>
 
           <Card>
-            <CardHeader>
-              <Palette
-                className={`${styles.section_cardIcon} ${styles['section_cardIcon--purple']}`}
-              />
+            <CardHeader className={styles.section_cardHeader}>
+              <Palette className={styles.section_cardIcon} />
               <CardTitle>Pixel-Perfect Design</CardTitle>
             </CardHeader>
             <CardContent>
