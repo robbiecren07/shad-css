@@ -38,13 +38,15 @@
     }
   }
 
-  &_cardHeader {
-    gap: 6px;
-  }
+  &_card {
+    &_header {
+      gap: 6px;
+    }
 
-  &_cardIcon {
-    width: 2rem;
-    height: 2rem;
-    color: hsla(var(--muted-foreground));
+    &_icon {
+      width: 2rem;
+      height: 2rem;
+      color: hsla(var(--muted-foreground));
+    }
   }
 }

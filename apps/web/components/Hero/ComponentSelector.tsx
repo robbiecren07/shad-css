@@ -14,7 +14,8 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Check, ChevronDown, ExternalLink, Palette } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Check, ChevronDown, ExternalLink, Clipboard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { capitalize } from '@/utils/helpers'
@@ -25,8 +26,24 @@ interface Props {
 }
 
 export default function ComponentSelector({ data }: Props) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
+  const [value, setValue] = useState<string>('npm')
   const [selectedComponent, setSelectedComponent] = useState<(typeof data)[0] | null>(null)
+
+  function renderPackageManagerCommand() {
+    switch (value) {
+      case 'npm':
+        return `npx shad-css@latest add ${selectedComponent?.name}`
+      case 'pnpm':
+        return `pnpm dlx shad-css@latest add ${selectedComponent?.name}`
+      case 'yarn':
+        return `yarn shad-css@latest add ${selectedComponent?.name}`
+      case 'bun':
+        return `bunx --bun shad-css@latest add ${selectedComponent?.name}`
+      default:
+        return `npm install shad-css@latest add ${selectedComponent?.name}`
+    }
+  }
 
   return (
     <>
@@ -97,7 +114,13 @@ export default function ComponentSelector({ data }: Props) {
                 <h4 className={styles.selectedCard_featuresTitle}>Installation</h4>
                 <div className={styles.selectedCard_code_block}>
                   <div className={styles.selectedCard_code_header}>
-                    <ToggleGroup type="single">
+                    <ToggleGroup
+                      type="single"
+                      value={value}
+                      onValueChange={(value) => {
+                        if (value) setValue(value)
+                      }}
+                    >
                       <ToggleGroupItem size="sm" value="npm">
                         npm
                       </ToggleGroupItem>
@@ -111,22 +134,46 @@ export default function ComponentSelector({ data }: Props) {
                         bun
                       </ToggleGroupItem>
                     </ToggleGroup>
+
+                    <TooltipProvider delayDuration={0}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={styles.selectedCard_code_copyBtn}
+                            onClick={() => {
+                              navigator.clipboard.writeText(renderPackageManagerCommand())
+                            }}
+                          >
+                            <Clipboard size="16" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Copy to clipboard</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                   <code className={styles.selectedCard_code_text}>
-                    bunx --bun shadcn@latest add toggle-group
+                    {renderPackageManagerCommand()}
                   </code>
                 </div>
               </div>
 
               <div className={styles.selectedCard_action}>
                 <Button className={styles.selectedCard_docBtn} asChild>
-                  <Link href={`/docs/${selectedComponent.name}`} target="_self">
+                  <Link href={`/docs/components/${selectedComponent.name}`} target="_self">
                     View Our Docs
                   </Link>
                 </Button>
 
                 <Button className={styles.selectedCard_docBtn} asChild>
-                  <Link href={`/docs/${selectedComponent.name}`} target="_blank" rel="nofollow">
+                  <Link
+                    href={`https://v3.shadcn.com/docs/components/${selectedComponent.name}`}
+                    target="_blank"
+                    rel="nofollow"
+                  >
                     <ExternalLink className={styles.selectedCard_docIcon} />
                     View Shadcn's Docs
                   </Link>

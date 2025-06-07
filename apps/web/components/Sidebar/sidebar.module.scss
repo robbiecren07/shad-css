@@ -1,0 +1,40 @@
+.container {
+  position: relative;
+  flex: 1 0 260px;
+  border-right: 1px solid hsl(var(--border));
+}
+
+.nav {
+  position: sticky;
+  top: 61px;
+  width: 100%;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+
+  &_title {
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 0;
+  }
+
+  &_group {
+    margin-bottom: 1.5rem;
+  }
+
+  &_item {
+    margin-bottom: 0.25rem;
+  }
+
+  &_link {
+    width: 100%;
+    font-weight: 400 !important;
+    justify-content: flex-start !important;
+
+    &_active {
+      font-weight: 500 !important;
+      background-color: hsl(var(--secondary));
+      color: hsl(var(--foreground));
+    }
+  }
+}

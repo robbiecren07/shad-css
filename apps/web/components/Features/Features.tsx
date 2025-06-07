@@ -15,38 +15,32 @@ export default function Features() {
 
         <div className={styles.section_grid}>
           <Card>
-            <CardHeader className={styles.section_cardHeader}>
-              <Code2 className={styles.section_cardIcon} />
+            <CardHeader className={styles.section_card_header}>
+              <Code2 className={styles.section_card_icon} />
               <CardTitle>Modular & Maintainable</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={styles.section_grid_cardText}>
-                Generate modular CSS that&lsquo;s easy to read, update, and scale.
-              </p>
+              <p>Generate modular CSS that&lsquo;s easy to read, update, and scale.</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className={styles.section_cardHeader}>
-              <Zap className={styles.section_cardIcon} />
+            <CardHeader className={styles.section_card_header}>
+              <Zap className={styles.section_card_icon} />
               <CardTitle>Blazing Fast</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={styles.section_cardText}>
-                Add or convert components in seconds—skip manual rewrites.
-              </p>
+              <p>Add or convert components in seconds—skip manual rewrites.</p>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className={styles.section_cardHeader}>
-              <Palette className={styles.section_cardIcon} />
+            <CardHeader className={styles.section_card_header}>
+              <Palette className={styles.section_card_icon} />
               <CardTitle>Pixel-Perfect Design</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={styles.section_cardText}>
-                Keep every detail of Shadcn/ui&lsquo;s design—no visual differences.
-              </p>
+              <p>Keep every detail of Shadcn/ui&lsquo;s design—no visual differences.</p>
             </CardContent>
           </Card>
         </div>
