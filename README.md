@@ -10,6 +10,8 @@ The component designs and implementations are sourced from Shadcn/ui and Radix U
 
 ### Note
 
+**As of right now the converter and CLI are setup to only support shadcn@2.3.0 and tailwindcss v3.**
+
 The conversion process currently preserves Tailwind’s `--tw-*` custom properties to ensure accurate styles and animations.
 We plan to offer an option to remove Tailwind variables in a future release.
 
