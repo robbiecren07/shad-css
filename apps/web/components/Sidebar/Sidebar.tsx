@@ -4,7 +4,6 @@ import Link from 'next/link'
 import styles from './sidebar.module.scss'
 import { Button } from '../ui/button'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
 
 interface NavItem {
   title: string

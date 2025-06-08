@@ -175,7 +175,7 @@ export default function ComponentSelector({ data }: Props) {
                     rel="nofollow"
                   >
                     <ExternalLink className={styles.selectedCard_docIcon} />
-                    View Shadcn's Docs
+                    View Shadcn&lsquo;s Docs
                   </Link>
                 </Button>
               </div>

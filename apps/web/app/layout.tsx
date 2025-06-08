@@ -5,9 +5,11 @@ import './globals.scss'
 
 const roboto = Roboto({
   variable: '--font-body',
+  subsets: ['latin'],
 })
 const raleway = Raleway({
   variable: '--font-heading',
+  subsets: ['latin'],
 })
 
 export default function RootLayout({

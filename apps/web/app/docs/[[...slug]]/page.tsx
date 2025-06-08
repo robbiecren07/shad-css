@@ -3,9 +3,7 @@ import { getDocSlugs } from '@/lib/getDocSlugs'
 import styles from './page.module.scss'
 
 interface Props {
-  params: {
-    slug: string[]
-  }
+  params: Promise<{ slug: string[] }>
 }
 
 export const dynamicParams = false
